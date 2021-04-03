@@ -1,5 +1,5 @@
 /.idea/
 /vendor/
-/package.php.yml
-/package-lock.php.yml
-/AppGameKit.dll
+package.php.yml
+package-lock.php.yml
+AppGameKit.dll
