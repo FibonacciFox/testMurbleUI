@@ -17,7 +17,7 @@ use fibonaccifox\AppGameKit;
 abstract class BaseObject
 {
     /**
-     * @var object Объект класса AppGameKit.
+     * @var AppGameKit Объект класса AppGameKit.
      */
     protected AppGameKit $agk;
 
@@ -29,7 +29,7 @@ abstract class BaseObject
     /**
      * BaseObject constructor.
      *
-     * @param object $agk - объект класса AppGameKit.
+     * @param AppGameKit $agk - объект класса AppGameKit.
      */
     public function __construct(AppGameKit $agk)
     {
