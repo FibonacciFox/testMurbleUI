@@ -25,6 +25,7 @@ class Core3D
     {
         $object = new ObjectBox($this->agk);
         $this->objectList[$object->objectId] = $object;
+        return $object;
     }
 
     public function CreateSphere()

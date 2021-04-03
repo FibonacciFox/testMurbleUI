@@ -7,10 +7,10 @@ use MarbleUI\modules\BaseObject;
 
 class Object3D extends BaseObject
 {
-
-    private $x;
-    private $y;
-    private $z;
+    /**
+     * @var array
+     */
+    var array $position;
 
     public function __construct(AppGameKit $agk, $objectID)
     {
@@ -33,8 +33,10 @@ class Object3D extends BaseObject
     {
         switch ($property) {
             case 'position':
-                if (is_array($value))
+                if (is_array($value)) {
+                    $this->position = $value;
                     $this->agk->SetObjectPosition($this->objectId, $value[0], $value[1], $value[2]);
+                }
                 break;
         }
     }

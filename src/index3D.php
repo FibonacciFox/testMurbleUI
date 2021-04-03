@@ -2,10 +2,12 @@
 
 use fibonaccifox\AppGameKit;
 use MarbleUI\modules\Text;
+use \MarbleUI\modules\Core3D;
 
 class index3D
 {
     public AppGameKit $AppGameKit;
+    private Core3D $Core3D;
 
     public function __construct()
     {
@@ -21,7 +23,9 @@ class index3D
         $agk->SetWindowTitle('Hello World');
         $agk->setvirtualresolution(1024, 768);
 
-
+        $this->Core3D = new Core3D($agk);
+        $box = $this->Core3D->CreateBox();
+        $box->position = [0,0,0];
     }
 
     public function Loop()
