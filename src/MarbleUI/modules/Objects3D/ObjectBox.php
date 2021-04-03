@@ -11,7 +11,6 @@ class ObjectBox extends Object3D
     {
         $objectID = $agk->CreateObjectBox(1, 1, 1);
         parent::__construct($agk, $objectID);
-        //return $objectID;
     }
 
 }
