@@ -41,7 +41,7 @@ class Core3D
          */
         foreach ($this->objectList as $object){
             if($object->Tag == $tag){
-                $objectList[] = $tag;
+                $objectList[] = $object;
             }
         }
         return $objectList;
@@ -50,6 +50,7 @@ class Core3D
     public function CreateBox()
     {
         $object = new ObjectBox($this->agk);
+        //var_dump($object->objectId);
         $this->objectList[$object->objectId] = $object;
         return $object;
     }
