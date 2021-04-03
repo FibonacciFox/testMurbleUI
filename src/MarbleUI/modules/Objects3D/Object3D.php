@@ -10,22 +10,21 @@ class Object3D extends BaseObject
     /**
      * @var array
      */
-    var array $position;
-    var int $x;
-    var int $y;
-    var int $z;
-    var bool $visible;
+    private array $position;
+    private int $x;
+    private int $y;
+    private int $z;
+    private bool $visible;
 
     var $Tag;
 
     private bool $softDelete;
 
-    public function __construct(AppGameKit $agk, $objectID)
+    public function __construct(AppGameKit $agk)
     {
         $this->softDelete = false;
         $this->agk = $agk;
         parent::__construct($agk);
-        $this->objectId = $objectID;
     }
 
     public function free()
@@ -41,6 +40,7 @@ class Object3D extends BaseObject
 
     public function __set($property, $value)
     {
+        //var_dump($property);
         switch ($property) {
             case 'position':
                 if (is_array($value)) {
@@ -74,6 +74,7 @@ class Object3D extends BaseObject
                 $this->agk->SetObjectVisible($this->objectId, $value);
                 break;
         }
+        parent::__set($property, $value);
     }
 
     public function __get($property)
@@ -100,6 +101,8 @@ class Object3D extends BaseObject
                 return $this->visible;
                 break;
         }
+
+        return parent::__get($property);
     }
 
 }

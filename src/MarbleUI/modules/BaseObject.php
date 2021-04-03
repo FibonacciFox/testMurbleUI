@@ -24,7 +24,7 @@ abstract class BaseObject
     /**
      * @var int Уникальный идентификатор в AppGameKit.
      */
-    protected int $objectId;
+    private $objectId;
 
     private $_data;
 

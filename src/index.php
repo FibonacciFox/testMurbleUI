@@ -39,7 +39,7 @@ class App
         $Text->position = [150, 150];
         $Text->colorAlpha = 1;
         $Text->colorBlue = 80;
-
+        //var_dump($Text->objectId);
         $this->Text = $Text;
 
 
