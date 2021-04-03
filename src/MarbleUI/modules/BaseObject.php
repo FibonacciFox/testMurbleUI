@@ -26,6 +26,8 @@ abstract class BaseObject
      */
     protected int $objectId;
 
+    private $_data;
+
     /**
      * BaseObject constructor.
      *
@@ -36,6 +38,14 @@ abstract class BaseObject
         $this->agk = $agk;
     }
 
+    public function SetData($key, $value){
+        $this->_data[$key] = $value;
+    }
+
+    public function GetData($key){
+        return $this->_data[$key];
+    }
+
     /**
      * @param $property
      * @return mixed
@@ -43,8 +53,17 @@ abstract class BaseObject
     public function __get($property)
     {
         switch ($property) {
-            case '$objectId':
+            case 'objectId':
                 return $this->objectId;
+                break;
+        }
+    }
+
+    public function __set($property, $value)
+    {
+        switch ($property) {
+            case 'objectId':
+                $this->objectId = $value;
                 break;
         }
     }

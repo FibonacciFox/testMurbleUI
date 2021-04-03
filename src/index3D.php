@@ -26,6 +26,7 @@ class index3D
         $this->Core3D = new Core3D($agk);
         $box = $this->Core3D->CreateBox();
         $box->position = [0,0,0];
+        var_dump($box->objectId);
         $box->Tag = 'MyBox';
         $box->SetData('Strafe', false);
         //var_dump($box->x);
@@ -36,7 +37,7 @@ class index3D
         $agk = $this->AppGameKit;
 
         $box = $this->Core3D->GetObjectWidthTag('MyBox'); //Вернет первый объект с таким тегом
-        var_dump($box);
+        //var_dump($box);
         if( $box->GetData('Strafe') ){
             $box->x += 0.05;
         }else{

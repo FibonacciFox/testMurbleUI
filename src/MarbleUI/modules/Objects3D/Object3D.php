@@ -18,8 +18,6 @@ class Object3D extends BaseObject
 
     var $Tag;
 
-    private $_data;
-
     private bool $softDelete;
 
     public function __construct(AppGameKit $agk, $objectID)
@@ -41,14 +39,6 @@ class Object3D extends BaseObject
         return $this->softDelete;
     }
 
-    public function SetData($key, $value){
-        $this->_data[$key] = $value;
-    }
-
-    public function GetData($key){
-        return $this->_data[$key];
-    }
-
     public function __set($property, $value)
     {
         switch ($property) {
@@ -59,7 +49,6 @@ class Object3D extends BaseObject
                 }
                 break;
             case 'x':
-                var_dump($value);
                 $this->x = $value;
                 $this->y = $this->agk->GetObjectY($this->objectId);
                 $this->z = $this->agk->GetObjectZ($this->objectId);
