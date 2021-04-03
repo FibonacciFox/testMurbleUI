@@ -3,6 +3,8 @@
 
 namespace MarbleUI\modules;
 
+use fibonaccifox\AppGameKit;
+
 /**
  * Class Text
  *
@@ -18,6 +20,7 @@ namespace MarbleUI\modules;
  * @property int $angle  -  Angle of rotation. Rotation angle(from 0 to 360).
  * @property int $alignment - Text alignment. 0=left, 1=center, 2=right
  * @property int $transparency -  The transparency mode for this text, 0=off, 1=alpha transparency, 2=additive blending.
+ * @property int $depth - The current depth of the text object, where 0 is the front of the screen and 10000 is the back.
  * @package MarbleUI\modules
  */
 class Text extends BaseObject
@@ -26,14 +29,12 @@ class Text extends BaseObject
     /**
      * Text constructor.
      *
-     * @param object $agk
+     * @param AppGameKit $agk
      */
-    public function __construct(object $agk)
+    public function __construct(AppGameKit $agk)
     {
         parent::__construct($agk);
-
         $this->objectId = $this->agk->CreateText('');
-
     }
 
     /**
@@ -44,7 +45,7 @@ class Text extends BaseObject
     /**
      * @var float Set the alpha component of the text color. The value should be in the range 0-255.
      */
-    private float $colorAlpha = 255.0;
+    private float $colorAlpha;
     /**
      * @var int Angle of rotation. Rotation angle(from 0 to 360).
      */
@@ -60,6 +61,8 @@ class Text extends BaseObject
      */
     private int $transparency = 1;
 
+
+
     /**
      * @param $property
      * @return mixed
@@ -72,7 +75,7 @@ class Text extends BaseObject
                 return $this->text;
                 break;
             case 'size':
-                $this->size = GetTextSize($this->objectId);
+                $this->size = $this->agk->GetTextSize($this->objectId);
                 return $this->size;
                 break;
             case 'position':
@@ -105,7 +108,7 @@ class Text extends BaseObject
                 return  $this->colorRed;
                 break;
             case 'angle':
-                return $this->agk->angle;
+                return $this->angle;
                 break;
             case 'alignment':
                 $this->alignment = $this->agk->GetTextAlignment($this->objectId);
@@ -117,6 +120,7 @@ class Text extends BaseObject
                 break;
 
         }
+        return parent::__get($property);
     }
 
     /**
@@ -173,6 +177,7 @@ class Text extends BaseObject
                 $this->agk->SetTextTransparency($this->objectId, $this->transparency);
                 break;
         }
+        parent::__set($property, $value);
     }
 
     /**

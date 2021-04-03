@@ -2,7 +2,6 @@
 
 
 namespace MarbleUI\modules;
-
 use fibonaccifox\AppGameKit;
 
 /**
@@ -10,7 +9,7 @@ use fibonaccifox\AppGameKit;
  ** EN: Agk base object.
  ** RU: Базовый объект AppGameKit.
  *
- * @property-read  int $objectId Уникальный идентификатор в AppGameKit.
+ * @property-read int $objectId Уникальный идентификатор в AppGameKit.
  *
  * @package MarbleUI\Categories
  */
@@ -24,9 +23,9 @@ abstract class BaseObject
     /**
      * @var int Уникальный идентификатор в AppGameKit.
      */
-    private $objectId;
+    private int $objectId;
 
-    private $_data;
+    protected $_data;
 
     /**
      * BaseObject constructor.
@@ -59,7 +58,12 @@ abstract class BaseObject
         }
     }
 
-    public function __set($property, $value)
+    /**
+     * @param $property
+     * @param $value
+     * @return mixed
+     */
+    public function __set($property,$value)
     {
         switch ($property) {
             case 'objectId':
