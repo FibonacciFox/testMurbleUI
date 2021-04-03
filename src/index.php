@@ -33,15 +33,14 @@ class App
         $agk->UseNewDefaultFonts(1);
         $agk->SetPrintSize(40);
 
-
-
-
         $Text = new Text($agk);
         $Text->text = "Анимация";
         $Text->size = 25;
         $Text->position = [150, 150];
         $Text->colorAlpha = 1;
         $Text->colorBlue = 80;
+
+        $this->Text = $Text;
 
 
 

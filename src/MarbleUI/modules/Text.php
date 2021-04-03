@@ -15,8 +15,9 @@ namespace MarbleUI\modules;
  * @property int $colorBlue  -  Blue component of the text color. The value should be in the range 0-255.
  * @property int $colorGreen   -  Green component of the text color. The value should be in the range 0-255.
  * @property int $colorRed  -  Red component of the text color. The value should be in the range 0-255.
- * @property int $rotate  -  Angle of rotation. Rotation angle(from 0 to 360).
+ * @property int $angle  -  Angle of rotation. Rotation angle(from 0 to 360).
  * @property int $alignment - Text alignment. 0=left, 1=center, 2=right
+ * @property int $transparency -  The transparency mode for this text, 0=off, 1=alpha transparency, 2=additive blending.
  * @package MarbleUI\modules
  */
 class Text extends BaseObject
@@ -47,12 +48,17 @@ class Text extends BaseObject
     /**
      * @var int Angle of rotation. Rotation angle(from 0 to 360).
      */
-    private int $rotate = 0;
+    private int $angle = 0;
 
     /**
      * @var float - Text alignment. 0=left, 1=center, 2=right
      */
     private float $alignment;
+
+    /**
+     * @var int The transparency mode for this text, 0=off, 1=alpha transparency, 2=additive blending.
+     */
+    private int $transparency = 1;
 
     /**
      * @param $property
@@ -66,36 +72,48 @@ class Text extends BaseObject
                 return $this->text;
                 break;
             case 'size':
-                return $this->agk->GetTextSize($this->objectId);
+                $this->size = GetTextSize($this->objectId);
+                return $this->size;
                 break;
             case 'position':
-                return [$this->agk->GetTextX($this->objectId), $this->agk->GetTextY($this->objectId)];
+                $this->x = $this->agk->GetTextX($this->objectId);
+                $this->y = $this->agk->GetTextY($this->objectId);
+                return [$this->x, $this->y];
                 break;
             case 'x':
-                return $this->agk->GetTextX($this->objectId);
+                $this->x = $this->agk->GetTextX($this->objectId);
+                return $this->x;
                 break;
             case 'y':
-                return $this->agk->GetTextY($this->objectId);
+                $this->y = $this->agk->GetTextY($this->objectId);
+                return $this->y;
                 break;
             case 'colorAlpha':
                 $this->colorAlpha = $this->agk->GetTextColorAlpha($this->objectId);
                 return $this->colorAlpha;
                 break;
             case 'colorBlue':
-                return $this->agk->GetTextColorBlue($this->objectId);
+                $this->colorBlue = $this->agk->GetTextColorBlue($this->objectId);
+                return  $this->colorBlue;
                 break;
             case 'colorGreen':
-                return $this->agk->GetTextColorGreen($this->objectId);
+                $this->colorGreen = $this->agk->GetTextcolorGreen($this->objectId);
+                return  $this->colorGreen;
                 break;
             case 'colorRed':
-                return $this->agk->GetTextColorRed($this->objectId);
+                $this->colorRed = $this->agk->GetTextcolorRed($this->objectId);
+                return  $this->colorRed;
                 break;
-            case 'rotate':
-                return $this->agk->rotate;
+            case 'angle':
+                return $this->agk->angle;
                 break;
             case 'alignment':
                 $this->alignment = $this->agk->GetTextAlignment($this->objectId);
                 return $this->alignment;
+                break;
+            case 'transparency':
+                //Есть только метод на установку альфа канала
+                return $this->transparency;
                 break;
 
         }
@@ -142,13 +160,17 @@ class Text extends BaseObject
             case 'colorRed':
                 $this->agk->SetTextColorRed($this->objectId, $value);
                 break;
-            case 'rotate':
-                $this->rotate = $value;
-                $this->agk->SetTextAngle($this->objectId, $this->rotate);
+            case 'angle':
+                $this->angle = $value;
+                $this->agk->SetTextAngle($this->objectId, $this->angle);
                 break;
             case 'alignment':
                 $this->alignment = $value;
                 $this->agk->SetTextAlignment($this->objectId, $this->alignment);
+                break;
+            case 'transparency':
+                $this->transparency = $value;
+                $this->agk->SetTextTransparency($this->objectId, $this->transparency);
                 break;
         }
     }
