@@ -3,6 +3,8 @@
 
 namespace MarbleUI\modules;
 
+use fibonaccifox\AppGameKit;
+
 /**
  * Class BaseObject
  ** EN: Agk base object.
@@ -17,7 +19,7 @@ abstract class BaseObject
     /**
      * @var object Объект класса AppGameKit.
      */
-    protected object $agk;
+    protected AppGameKit $agk;
 
     /**
      * @var int Уникальный идентификатор в AppGameKit.
@@ -29,7 +31,7 @@ abstract class BaseObject
      *
      * @param object $agk - объект класса AppGameKit.
      */
-    public function __construct(object $agk)
+    public function __construct(AppGameKit $agk)
     {
         $this->agk = $agk;
     }
