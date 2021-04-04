@@ -6,7 +6,7 @@ use fibonaccifox\AppGameKit;
 use MarbleUI\modules\BaseObject;
 
 /**
- * Class Text
+ * Class Object3D
  *
  * @property float $x        - X position of a text object in world coordinates.
  * @property float $y        - Y position of a text object in world coordinates.

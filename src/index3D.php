@@ -29,13 +29,13 @@ class index3D
 
         $this->testID = 2;
 
-        /*$agk->SetWindowAllowResize(0);
-        $agk->SetSyncRate(60, 0);
+        $agk->SetWindowAllowResize(0);
+        //$agk->SetSyncRate(60, 0);
         $agk->SetAntiAliasMode(1);
         $agk->SetOrientationAllowed(1, 1, 1, 1);
         $agk->SetScissor(0, 0, 0, 0);
         $agk->SetCameraRange(1, 0.01, 3000);
-        $agk->SetSunActive(1);*/
+        $agk->SetSunActive(1);
 
         $this->Core3D = new Core3D($agk);
 
