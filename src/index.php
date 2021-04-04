@@ -31,15 +31,16 @@ class App
         $agk->SetClearColor(0, 50, 0);
         //$agk->SetPrintColor(0, 0, 0, 190);
         $agk->UseNewDefaultFonts(1);
-        $agk->SetPrintSize(40);
+        $agk->SetPrintSize(20);
 
 
         $this->text = new Text($agk);
         $this->text->text = "БУМАГА";
-        $this->text->size = 40;
-        $this->text->position = [100, 100];
+        $this->text->size = 20;
+        $this->text->position = [10, 100];
         $this->text->colorAlpha = 255;
-        var_dump($this->text->objectId);
+        $this->text->fixToScreen = true;
+
 
     }
 
@@ -47,14 +48,10 @@ class App
     {
 
         $agk = $this->AppGameKit;
-        //$agk->Print("HelloWorld!");
-        $agk->Print($this->text->x);
+        $agk->Print("X pos Text: " .$this->text->x .' '. $this->text->fixToScreen);
 
-        //$agk->Print("FPS: " . $this->AppGameKit->ScreenFPS());
-
-        //$this->Text->colorAlpha +=1;
-        $b = $agk->MakeColor(0, 136, 255);
-
+        $this->text->x +=1;
+        //$this->text->colorAlpha -=10;
 
         $agk->Sync();
     }

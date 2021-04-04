@@ -9,8 +9,8 @@ use fibonaccifox\AppGameKit;
  ** EN: Agk base object.
  ** RU: Базовый объект AppGameKit.
  *
- * @property-read int $objectId Уникальный идентификатор в AppGameKit.
  *
+ * @property-read int $objectId Уникальный идентификатор в AppGameKit.
  * @package MarbleUI\Categories
  */
 abstract class BaseObject
@@ -21,9 +21,10 @@ abstract class BaseObject
     protected AppGameKit $agk;
 
     /**
-     * @var int Уникальный идентификатор в AppGameKit.
+     *
+     * @var int $objectId Уникальный идентификатор в AppGameKit.
      */
-    private int $objectId;
+    protected int $objectId;
 
     protected $_data;
 
