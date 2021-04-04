@@ -16,7 +16,7 @@ class index3D
     {
         $this->AppGameKit = new AppGameKit($this);
         $agk = $this->AppGameKit;
-        $agk->Init(800, 600, false);
+        $agk->Init(1920, 1080, false);
     }
 
     public function Begin()
@@ -53,7 +53,7 @@ class index3D
             }
         }
 
-        if($this->testID == 1) {
+        if ($this->testID == 1) {
             //Создание объектов
             for ($i = -300; $i <= 300; $i++) {
                 if ($i < 0) $y = 1;
@@ -87,26 +87,34 @@ class index3D
             }
         }
 
-        if($this->testID == 2) {
+        if ($this->testID == 2) {
             $box_1 = $this->Core3D->CreateBox();
-            $box_1->SetPosition([-5, 0, 0]);
+            $box_1->SetPosition([0, 0, 0]);
             $box_1->SetImage(1);
             $box_1->SetTag('Mother_box');
 
             $box_2 = $this->Core3D->CreateBox();
-            $box_2->SetPosition([10, 0, 0]);
+            $box_2->SetPosition([-5, 0, 0]);
             $box_2->SetImage(2);
             $box_2->FixToObject($box_1->objectId);
 
             $box_1->SetData('Strafe', false);
         }
+
+        $plane = $this->Core3D->CreatePlane(10, 10);
+        $plane->SetImage(5);
+        //$plane->RotateX(90);
+        $plane->SetRotationX(90);
+        $plane->SetTag("Plane");
+        $plane->SetY(-2.5);
+        $plane->SetScale([3, 3, 1]);
     }
 
     public function Loop()
     {
         $agk = $this->AppGameKit;
 
-        if($this->testID == 1) {
+        if ($this->testID == 1) {
             $boxs = $this->Core3D->GetObjectsWidthTag('MyBox');
             /**
              * @var \MarbleUI\modules\Objects3D\Object3D $box
@@ -127,19 +135,21 @@ class index3D
             $agk->MoveCameraLocalZ(1, -0.025);
         }
 
-        if($this->testID == 2) {
+        if ($this->testID == 2) {
             $box = $this->Core3D->GetObjectWidthTag('Mother_box');
-            if( $box->GetY() > 2 ) $box->SetData('Strafe', false);
-            elseif ( $box->GetY() < -2 ) $box->SetData('Strafe', true);
+            if ($box->GetY() > 2) $box->SetData('Strafe', false);
+            elseif ($box->GetY() < -2) $box->SetData('Strafe', true);
 
             $strafe = $box->GetData('Strafe');
-            if($strafe)
+            if ($strafe)
                 $box->MoveY(0.025);
             else
                 $box->MoveY(-0.025);
+
+            //$this->Core3D->GetObjectWidthTag("Plane")->RotateX(1);
         }
 
-        $agk->Print($agk->ScreenFPS());
+        $agk->Print(floor($agk->ScreenFPS()));
         $agk->Sync();
     }
 

@@ -20,9 +20,9 @@ class Object3D extends BaseObject
     /**
      * @var array
      */
-    private float $x;
-    private float $y;
-    private float $z;
+    private float $x = 0;
+    private float $y = 0;
+    private float $z = 0;
 
     private float $scale_x = 1;
     private float $scale_y = 1;
@@ -259,8 +259,8 @@ class Object3D extends BaseObject
     }
 
     /**
-     * Возвращает текущее положение [X, Y, Z] объекта в мировых координатах. Это учитывает родительские позиции в результате
-     * FixObjectToObject или FixObjectToBone и возвращает абсолютное мировое положение объекта.
+     * Возвращает текущее положение [X, Y, Z] объекта в мировых координатах. Это учитывает родительские позиции в
+     * результате FixObjectToObject или FixObjectToBone и возвращает абсолютное мировое положение объекта.
      *
      * @return array [x, y, z]
      */
@@ -352,11 +352,13 @@ class Object3D extends BaseObject
     }
 
     /**
-     * Устанавливает, является ли этот объект видимым или нет. Он по-прежнему будет участвовать в столкновениях и других невизуальных взаимодействиях.
+     * Устанавливает, является ли этот объект видимым или нет. Он по-прежнему будет участвовать в столкновениях и
+     * других невизуальных взаимодействиях.
      *
      * @param bool $visible 1, чтобы сделать этот объект видимым, 0, чтобы скрыть его.
      */
-    public function SetVisible(bool $visible){
+    public function SetVisible(bool $visible)
+    {
         $this->agk->SetObjectVisible($this->objectId, $visible);
     }
 
@@ -365,7 +367,8 @@ class Object3D extends BaseObject
      *
      * @return int
      */
-    public function GetVisible(){
+    public function GetVisible()
+    {
         return $this->agk->GetObjectVisible($this->objectId);
     }
 
@@ -374,8 +377,148 @@ class Object3D extends BaseObject
      *
      * @param $tag
      */
-    public function SetTag($tag){
+    public function SetTag($tag)
+    {
         $this->Tag = $tag;
+    }
+
+    /**
+     * Задает поворот указанного объекта с помощью углов Эйлера в градусах.
+     *
+     * @param array $rotation [x, y, z]
+     */
+    public function SetRotation(array $rotation)
+    {
+        $this->agk->SetObjectRotation($this->objectId, $rotation[0], $rotation[1], $rotation[2]);
+    }
+
+    /**
+     * Задает поворот по X
+     *
+     * @param float $rotation
+     */
+    public function SetRotationX(float $rotation)
+    {
+        $this->agk->SetObjectRotation($this->objectId, $rotation, $this->GetAngleY(), $this->GetAngleZ());
+    }
+
+    /**
+     * Задает поворот по Y
+     *
+     * @param float $rotation
+     */
+    public function SetRotationY(float $rotation)
+    {
+        $this->agk->SetObjectRotation($this->objectId, $this->GetAngleX(), $rotation, $this->GetAngleZ());
+    }
+
+    /**
+     * Задает поворот по Z
+     *
+     * @param float $rotation
+     */
+    public function SetRotationZ(float $rotation)
+    {
+        $this->agk->SetObjectRotation($this->objectId, $this->GetAngleX(), $this->GetAngleY(), $rotation);
+    }
+
+    /**
+     * Возвращает X-компоненту текущего вращения объекта, преобразованную в углы Эйлера.
+     *
+     * @return float
+     */
+    public function GetAngleX()
+    {
+        return $this->agk->GetObjectAngleX($this->objectId);
+    }
+
+    /**
+     * Возвращает Y-компоненту текущего вращения объекта, преобразованную в углы Эйлера.
+     *
+     * @return float
+     */
+    public function GetAngleY()
+    {
+        return $this->agk->GetObjectAngleY($this->objectId);
+    }
+
+    /**
+     * Возвращает Z-компоненту текущего вращения объекта, преобразованную в углы Эйлера.
+     *
+     * @return float
+     */
+    public function GetAngleZ()
+    {
+        return $this->agk->GetObjectAngleZ($this->objectId);
+    }
+
+    /**
+     * Вращает указанный объект вокруг его локальной оси X, то есть, если бы объект был самолетом, эта команда
+     * заставила бы его наклоняться вверх и вниз независимо от того, в каком направлении он обращен.
+     *
+     * @param float $amount
+     */
+    public function RotateX(float $amount)
+    {
+        $this->agk->RotateObjectLocalX($this->objectId, $amount);
+    }
+
+    /**
+     * Вращает указанный объект вокруг его локальной оси Y, то есть если бы объект был самолетом, эта команда заставила
+     * бы его поворачиваться влево и вправо независимо от того, в каком направлении он находится.
+     *
+     * @param float $amount
+     */
+    public function RotateY(float $amount)
+    {
+        $this->agk->RotateObjectLocalY($this->objectId, $amount);
+    }
+
+    /**
+     * Вращает указанный объект вокруг своей локальной оси Z, то есть если бы объект был самолетом, эта команда
+     * заставила бы его сделать бочкообразный крен независимо от того, в каком направлении он был обращен.
+     *
+     * @param float $amount
+     */
+    public function RotateZ(float $amount)
+    {
+        $this->agk->RotateObjectLocalZ($this->objectId, $amount);
+    }
+
+    /**
+     * Вращает указанный объект вокруг глобальной оси X. Представьте себе, что камера смотрит вниз по оси Z на объект
+     * со случайным вращением. Эта команда будет наклонять объект вверх и вниз относительно камеры независимо от того,
+     * в какую сторону он обращен.
+     *
+     * @param float $amount
+     */
+    public function RotateGlobalX(float $amount)
+    {
+        $this->agk->RotateObjectGlobalX($this->objectId, $amount);
+    }
+
+    /**
+     * Вращает указанный объект вокруг глобальной оси Y. Представьте себе, что камера смотрит вниз по оси Z на объект
+     * со случайным вращением. Эта команда повернет объект влево и вправо относительно камеры независимо от того, в
+     * какую сторону он обращен.
+     *
+     * @param float $amount
+     */
+    public function RotateGlobalY(float $amount)
+    {
+        $this->agk->RotateObjectGlobalY($this->objectId, $amount);
+    }
+
+    /**
+     * Вращает указанный объект вокруг глобальной оси Z. Представьте себе, что камера смотрит вниз по оси Z на объект
+     * со случайным вращением. Эта команда будет вращать объект влево и вправо относительно камеры независимо от того,
+     * в какую сторону он обращен.
+     *
+     * @param float $amount
+     */
+    public function RotateGlobalZ(float $amount)
+    {
+        $this->agk->RotateObjectGlobalZ($this->objectId, $amount);
     }
 
     /**
@@ -383,7 +526,8 @@ class Object3D extends BaseObject
      *
      * @return mixed
      */
-    public function GetTag(){
+    public function GetTag()
+    {
         return $this->Tag;
     }
 

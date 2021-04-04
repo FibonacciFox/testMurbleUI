@@ -13,5 +13,4 @@ class ObjectBox extends Object3D
         $this->objectId = $objectID;
         parent::__construct($agk);
     }
-
 }

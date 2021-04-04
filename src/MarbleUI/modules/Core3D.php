@@ -10,6 +10,7 @@ use MarbleUI\modules\Objects3D\Object3D;
 use MarbleUI\modules\Objects3D\ObjectCapsule;
 use MarbleUI\modules\Objects3D\ObjectCone;
 use MarbleUI\modules\Objects3D\ObjectCylinder;
+use MarbleUI\modules\Objects3D\ObjectPlane;
 use MarbleUI\modules\Objects3D\ObjectSphere;
 
 /**
@@ -114,9 +115,11 @@ class Core3D
 
     }
 
-    public function CreatePlane()
+    public function CreatePlane($width = 1, $height = 1)
     {
-
+        $object = new ObjectPlane($this->agk, $width, $height);
+        $this->objectList[$object->objectId] = $object;
+        return $object;
     }
 
     public function CreateHeightMap()
