@@ -33,75 +33,79 @@ class index3D
         $agk->SetCameraRange(1, 0.01, 3000);
         $agk->SetSunActive(1);*/
 
-
         $this->Core3D = new Core3D($agk);
 
+        //Загрузка текстур
         $dir_link = "media/textures/";
         $dir_data = scandir(realpath($dir_link));
-        //var_dump($dir_data);
-
-        //$path = $this->AppGameKit->getPath('textures/brks_00.png');
-        //$this->AppGameKit->LoadImage($path);
-
         $id = 0;
-        foreach ($dir_data as $file){
-            if($file != "." and $file != ".." and $file != "player.png"){
+        foreach ($dir_data as $file) {
+            if ($file != "." and $file != ".." and $file != "player.png") {
                 $path = $agk->getPath("textures/$file");
                 $path = str_replace('\\', '/', $path);
-                //var_dump($path);
-                $id_l = $agk->LoadImage($id, $path);
-                //var_dump($path);
-                //var_dump($id_l);
+                $agk->LoadImage($id, $path);
                 $this->textures[] = $id;
                 $id++;
             }
         }
-        //var_dump(1);
-        //var_dump($this->textures);
-        for ($i=-500; $i<=500; $i++) {
-            if($i<0) $y = 1;
-            else $y = -1;
-            $box = $this->Core3D->CreateBox();
-            $box->SetPosition([$i*2, $y, 0]);
-            $box->Tag = 'MyBox';
-            $box->SetData('Strafe', false);
 
-            $this->AppGameKit->SetObjectImage($box->objectId, $this->textures[rand(0, $id)], 0);
+        //Создание объектов
+        for ($i = -300; $i <= 300; $i++) {
+            if ($i < 0) $y = 1;
+            else $y = -1;
+
+            $objectNumber = rand(0,4);
+
+            switch ($objectNumber){
+                case 0:
+                    $object = $this->Core3D->CreateBox();
+                    break;
+                case 1:
+                    $object = $this->Core3D->CreateSphere();
+                    break;
+                case 2:
+                    $object = $this->Core3D->CreateCapsule();
+                    break;
+                case 3:
+                    $object = $this->Core3D->CreateCone();
+                    break;
+                case 4:
+                    $object = $this->Core3D->CreateCylinder();
+                    break;
+            }
+
+            $object->SetPosition([$i * 2, $y, 0]);
+            $object->Tag = 'MyBox';
+            $object->SetData('Strafe', false);
+            $object->SetScale([rand(0.2, 5), rand(0.2, 5), rand(0.2, 5)]);
+            $this->AppGameKit->SetObjectImage($object->objectId, $this->textures[rand(0, $id)], 0);
         }
-        $agk->Sync();
-        //$this->AppGameKit->SetScreen
-        //var_dump($box->GetData('Strafe'));
     }
 
     public function Loop()
     {
-        //if(false == true) {
-            $agk = $this->AppGameKit;
+        $agk = $this->AppGameKit;
 
-            $boxs = $this->Core3D->GetObjectsWidthTag('MyBox'); //Вернет первый объект с таким тегом
-            //var_dump($boxs);
-            /**
-             * @var \MarbleUI\modules\Objects3D\Object3D $box
-             */
-            foreach ($boxs as $box) {
+        $boxs = $this->Core3D->GetObjectsWidthTag('MyBox');
+        /**
+         * @var \MarbleUI\modules\Objects3D\Object3D $box
+         */
+        foreach ($boxs as $box) {
 
-                if ($box->GetX() != 0) {
-                    if ($box->GetData('Strafe')) {
-                        $box->MoveX(0.1);
-                    } else {
-                        $box->MoveX(-0.1);
-                    }
+            if ($box->GetX() != 0) {
+                if ($box->GetData('Strafe')) {
+                    $box->MoveX(0.1);
+                } else {
+                    $box->MoveX(-0.1);
                 }
-                //var_dump($box->x);
-
-                if ($box->GetX() < -6) $box->SetData('Strafe', true);
-                if ($box->GetX() > 6) $box->SetData('Strafe', false);
             }
-            //$b = $agk->MakeColor(0, 136, 255);
-            //$agk->DrawBox(500, 50, 650, 150, $b, $b, $b, $b, 1);
-            $agk->Print($agk->ScreenFPS());
-            $agk->Sync();
-        //}
+
+            if ($box->GetX() < 0) $box->SetData('Strafe', true);
+            if ($box->GetX() > 0) $box->SetData('Strafe', false);
+        }
+        $agk->MoveCameraLocalZ(1, -0.025);
+        $agk->Print($agk->ScreenFPS());
+        $agk->Sync();
     }
 
     public function End()
