@@ -38,7 +38,7 @@ class App
         $this->text->text = "БУМАГА";
         $this->text->size = 40;
         $this->text->position = [80, 100];
-        $this->text->colorAlpha = 255;
+        $this->text->colorAlpha = 180;
         $this->text->alignment = 1;
 
 

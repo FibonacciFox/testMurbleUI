@@ -105,7 +105,7 @@ class Object3D extends BaseObject
     }
 
     /**
-     * установить объект по Y
+     * установть объект по Y
      *
      * @param float $y
      */
@@ -118,7 +118,7 @@ class Object3D extends BaseObject
     }
 
     /**
-     * @param float $z установить объект по Z
+     * @param float $z установть объект по Z
      */
     public function SetZ(float $z)
     {
@@ -130,7 +130,7 @@ class Object3D extends BaseObject
 
 
     /**
-     * Установить объект по X,Y,Z
+     * Установтиь объект по X,Y,Z
      *
      * @param array $position
      */
