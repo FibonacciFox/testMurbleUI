@@ -52,7 +52,7 @@ class Core3D
          * @var Object3D $object
          */
         foreach ($this->objectList as $object) {
-            if ($object->Tag == $tag) {
+            if ($object->GetTag() == $tag) {
                 return $object;
             }
         }
@@ -72,7 +72,7 @@ class Core3D
          * @var Object3D $object
          */
         foreach ($this->objectList as $object) {
-            if ($object->Tag == $tag) {
+            if ($object->GetTag() == $tag) {
                 $objectList[] = $object;
             }
         }
@@ -92,7 +92,6 @@ class Core3D
         $this->objectList[$object->objectId] = $object;
         return $object;
     }
-
 
     /**
      * Создать сферу

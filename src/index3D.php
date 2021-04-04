@@ -80,7 +80,7 @@ class index3D
                 }
 
                 $object->SetPosition([$i * 2, $y, 0]);
-                $object->Tag = 'MyBox';
+                $object->SetTag('MyBox');
                 $object->SetData('Strafe', false);
                 $object->SetScale([rand(0.2, 5), rand(0.2, 5), rand(0.2, 5)]);
                 $object->SetImage($this->textures[rand(1, $id)]);
@@ -91,7 +91,7 @@ class index3D
             $box_1 = $this->Core3D->CreateBox();
             $box_1->SetPosition([-5, 0, 0]);
             $box_1->SetImage(1);
-            $box_1->Tag = 'Mother_box';
+            $box_1->SetTag('Mother_box');
 
             $box_2 = $this->Core3D->CreateBox();
             $box_2->SetPosition([10, 0, 0]);

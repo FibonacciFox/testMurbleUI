@@ -28,9 +28,7 @@ class Object3D extends BaseObject
     private float $scale_y = 1;
     private float $scale_z = 1;
 
-    private bool $visible;
-
-    var $Tag;
+    private $Tag;
 
     private bool $softDelete;
 
@@ -228,6 +226,54 @@ class Object3D extends BaseObject
     }
 
     /**
+     * Возвращает текущее X-положение объекта в мировых координатах. Это учитывает родительские позиции в результате
+     * FixObjectToObject или FixObjectToBone и возвращает абсолютное мировое положение объекта.
+     *
+     * @return float
+     */
+    public function GetWorldX()
+    {
+        return $this->agk->GetObjectWorldX($this->objectId);
+    }
+
+    /**
+     * Возвращает текущее Y-положение объекта в мировых координатах. Это учитывает родительские позиции в результате
+     * FixObjectToObject или FixObjectToBone и возвращает абсолютное мировое положение объекта.
+     *
+     * @return float
+     */
+    public function GetWorldY()
+    {
+        return $this->agk->GetObjectWorldY($this->objectId);
+    }
+
+    /**
+     * Возвращает текущее Z-положение объекта в мировых координатах. Это учитывает родительские позиции в результате
+     * FixObjectToObject или FixObjectToBone и возвращает абсолютное мировое положение объекта.
+     *
+     * @return float
+     */
+    public function GetWorldZ()
+    {
+        return $this->agk->GetObjectWorldZ($this->objectId);
+    }
+
+    /**
+     * Возвращает текущее положение [X, Y, Z] объекта в мировых координатах. Это учитывает родительские позиции в результате
+     * FixObjectToObject или FixObjectToBone и возвращает абсолютное мировое положение объекта.
+     *
+     * @return array [x, y, z]
+     */
+    public function GetWorldPosition()
+    {
+        return [
+            $this->agk->GetObjectWorldX($this->objectId),
+            $this->agk->GetObjectWorldY($this->objectId),
+            $this->agk->GetObjectWorldZ($this->objectId)
+        ];
+    }
+
+    /**
      * Получить позицию объекта по X,Y,Z
      *
      * @return array
@@ -249,6 +295,17 @@ class Object3D extends BaseObject
     }
 
     /**
+     * Аналогично FixObjectToObject, за исключением того, что родитель будет костью в другом объекте.
+     *
+     * @param int $objectID
+     * @param int $boneID
+     */
+    public function FixToBone(int $objectID, int $boneID)
+    {
+        $this->agk->FixObjectToBone($this->objectId, $objectID, $boneID);
+    }
+
+    /**
      * Устанавливает все сетки в этом объекте для использования этого изображения при рендеринге. Вы можете установить
      * текстуры отдельно для каждой сетки с помощью SetObjectMeshImage. Каждая сетка может иметь до 8 изображений,
      * назначенных ей на этапах текстуры от 0 до 7. Если вы не уверены, какой этап текстуры использовать, поместите
@@ -258,23 +315,76 @@ class Object3D extends BaseObject
      * пиксельное значение для отображения на экране. Использование значения изображения 0 для определенного этапа
      * текстуры удаляет любое назначенное изображение с этого этапа.
      *
-     * @param     $imageID
-     * @param int $texStage
+     * @param int $imageID  Идентификатор изображения
+     * @param int $texStage Этап текстуры, используемый для этого изображения.
      */
-    public function SetImage($imageID, $texStage = 0)
+    public function SetImage(int $imageID, int $texStage = 0)
     {
         $this->agk->SetObjectImage($this->objectId, $imageID, $texStage);
     }
 
     /**
-     * Аналогично FixObjectToObject, за исключением того, что родитель будет костью в другом объекте.
+     * Устанавливает все сетки в этом объекте для использования указанного изображения в качестве световой карты. Вы
+     * можете установить световую карту для одной сетки с помощью SetObjectMeshLightMap. Световая карта будет помещена
+     * в текстурную стадию 1, перезаписывая все, что уже есть, и будет сгенерирован шейдер, который объединит ее с
+     * текстурной стадией 0 и любым динамическим освещением, чтобы правильно осветить объект. Если вы устанавливаете
+     * свой собственный шейдер с помощью SetObjectShader, то ваш шейдер должен будет использовать саму световую карту,
+     * так как AGK не будет изменять ваш шейдер таким образом. Световая карта будет использовать второй набор
+     * УФ-координат, если он доступен, в противном случае она будет использовать те же УФ-координаты, что и базовая
+     * текстура.
      *
-     * @param int $objectID
-     * @param int $boneID
+     * @param $imageID Идентификатор изображения
      */
-    public function FixToBone(int $objectID, int $boneID)
+    public function SetLightMap(int $imageID)
     {
-        $this->agk->FixObjectToBone($this->objectId, $objectID, $boneID);
+        $this->agk->SetObjectLightMap($this->objectId, $imageID);
+    }
+
+    /**
+     * Включает или выключает туман при рисовании этого объекта. По умолчанию все объекты получают туман, когда он
+     * включен с помощью SetFogMode
+     *
+     * @param int $mode 0, чтобы выключить туман, 1, чтобы включить его.
+     */
+    public function SetFogMode(int $mode)
+    {
+        $this->agk->SetObjectFogMode($this->objectId, $mode);
+    }
+
+    /**
+     * Устанавливает, является ли этот объект видимым или нет. Он по-прежнему будет участвовать в столкновениях и других невизуальных взаимодействиях.
+     *
+     * @param bool $visible 1, чтобы сделать этот объект видимым, 0, чтобы скрыть его.
+     */
+    public function SetVisible(bool $visible){
+        $this->agk->SetObjectVisible($this->objectId, $visible);
+    }
+
+    /**
+     * Возвращает текущий режим видимости для этого объекта
+     *
+     * @return int
+     */
+    public function GetVisible(){
+        return $this->agk->GetObjectVisible($this->objectId);
+    }
+
+    /**
+     * Устанавливает тэг объекта
+     *
+     * @param $tag
+     */
+    public function SetTag($tag){
+        $this->Tag = $tag;
+    }
+
+    /**
+     * Возвращает тэг объекта
+     *
+     * @return mixed
+     */
+    public function GetTag(){
+        return $this->Tag;
     }
 
     private function UpdatePosition()
