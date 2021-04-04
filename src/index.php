@@ -36,10 +36,10 @@ class App
 
         $this->text = new Text($agk);
         $this->text->text = "БУМАГА";
-        $this->text->size = 20;
-        $this->text->position = [10, 100];
+        $this->text->size = 40;
+        $this->text->position = [80, 100];
         $this->text->colorAlpha = 255;
-        $this->text->fixToScreen = true;
+        $this->text->alignment = 1;
 
 
     }
@@ -48,10 +48,10 @@ class App
     {
 
         $agk = $this->AppGameKit;
-        $agk->Print("X pos Text: " .$this->text->x .' '. $this->text->fixToScreen);
-
-        $this->text->x +=1;
-        //$this->text->colorAlpha -=10;
+        $agk->Print("X pos Text: " . $this->text->x . ' ' . $this->text->fixToScreen);
+        $this->text->angle = 90;
+        $this->text->x += 1;
+        $this->text->colorAlpha -= 6;
 
         $agk->Sync();
     }

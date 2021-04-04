@@ -29,7 +29,7 @@ use fibonaccifox\AppGameKit;
  * GetTextDepth !
  * GetTextExists !
  * GetTextHitTest
- * GetTextLength
+ * GetTextLength !
  * GetTextLineSpacing
  * GetTextSize !
  * GetTextSpacing
@@ -107,6 +107,9 @@ use fibonaccifox\AppGameKit;
  *     to move around the world. Use this command to instead fix the text to the screen so it will move with the
  *     viewport when the viewport is moved around. You can still reposition a text that is fixed to the screen, it only
  *     affects what happens when the viewport is moved. MODE: (true = screen text, false = world text);
+ *
+ * @author  FibonacciFox
+ * @version 1.0.0;
  * @package MarbleUI\modules
  */
 class Text extends BaseObject
@@ -337,7 +340,7 @@ class Text extends BaseObject
                 break;
             case 'angleRad':
                 $this->angleRad = $value;
-                $this->agk->SetTextAngleRad($this->objectId, $this->angle);
+                $this->agk->SetTextAngleRad($this->objectId, $this->angleRad);
                 break;
             case 'alignment':
                 $this->alignment = $value;
@@ -411,6 +414,18 @@ class Text extends BaseObject
     public function GetColor(): array
     {
         return [$this->colorRed, $this->colorGreen, $this->colorBlue, $this->colorAlpha];
+    }
+
+    /**
+     * Returns the current length of the string the text object is displaying.
+     *
+     * Возвращает текущую длину строки, отображаемой текстовым объектом.
+     *
+     * @return int
+     */
+    public function GetLength(): int
+    {
+        return $this->agk->GetTextLength($this->objectId);
     }
 
 

@@ -14,7 +14,7 @@ class index3D
     {
         $this->AppGameKit = new AppGameKit($this);
         $agk = $this->AppGameKit;
-        $agk->Init(1920, 1080, false);
+        $agk->Init(800, 600, false);
     }
 
     public function Begin()
