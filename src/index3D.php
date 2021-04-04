@@ -98,6 +98,27 @@ class index3D
             $box_2->SetImage(2);
             $box_2->FixToObject($box_1->objectId);
 
+            $box_2 = $this->Core3D->CreateBox();
+            $box_2->SetPosition([5, 0, 0]);
+            $box_2->SetImage(2);
+            $box_2->FixToObject($box_1->objectId);
+
+            $cylinder_1 = $this->Core3D->CreateCylinder(5, 0.5, 20);
+            $cylinder_1->SetImage(1);
+            $cylinder_1->FixToObject($box_1->objectId);
+
+            $cylinder_2 = $this->Core3D->CreateCylinder(5, 0.5, 20);
+            $cylinder_2->SetRotationZ(90);
+            $cylinder_2->SetPosition([2.5, 0, 0]);
+            $cylinder_2->SetImage(2);
+            $cylinder_2->FixToObject($box_1->objectId);
+
+            $cylinder_3 = $this->Core3D->CreateCylinder(5, 0.5, 20);
+            $cylinder_3->SetRotationZ(90);
+            $cylinder_3->SetPosition([-2.5, 0, 0]);
+            $cylinder_3->SetImage(2);
+            $cylinder_3->FixToObject($box_1->objectId);
+
             $box_1->SetData('Strafe', false);
         }
 
@@ -146,6 +167,7 @@ class index3D
             else
                 $box->MoveY(-0.025);
 
+            $box->RotateY(1);
             //$this->Core3D->GetObjectWidthTag("Plane")->RotateX(1);
         }
 

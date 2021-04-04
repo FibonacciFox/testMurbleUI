@@ -6,20 +6,17 @@ use fibonaccifox\AppGameKit;
 use MarbleUI\modules\BaseObject;
 
 /**
+ * Базовый класс всех 3D объектов
+ *
  * Class Object3D
  *
- * @property float $x        - X position of a text object in world coordinates.
- * @property float $y        - Y position of a text object in world coordinates.
- * @property float $z        - Z position of a text object in world coordinates.
- * @property array $position - Z position of a text object in world coordinates.
- * @property bool  $visible  - Z position of a text object in world coordinates.
  * @package MarbleUI\modules\Objects3D
+ *
+ * @author  ElGenKa
+ * @version 1.0.0;
  */
 class Object3D extends BaseObject
 {
-    /**
-     * @var array
-     */
     private float $x = 0;
     private float $y = 0;
     private float $z = 0;
