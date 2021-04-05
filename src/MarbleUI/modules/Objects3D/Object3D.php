@@ -283,12 +283,16 @@ class Object3D extends BaseObject
 
     /**
      * Прикрепит объект к другому объекту (объект на котором выполняется данный метод станет дочерним)
+     * Может принимать как id объекта, так и сам объект
      *
-     * @param int $objectID id Объекта к которому крепимся
+     * @param $object
      */
-    public function FixToObject(int $objectID)
+    public function FixToObject($object)
     {
-        $this->agk->FixObjectToObject($this->objectId, $objectID);
+        if (is_int($object))
+            $this->agk->FixObjectToObject($this->objectId, $object);
+        elseif (is_object($object))
+            $this->agk->FixObjectToObject($this->objectId, $object->objectId);
     }
 
     /**

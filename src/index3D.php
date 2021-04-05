@@ -1,16 +1,17 @@
 <?php
 
 use fibonaccifox\AppGameKit;
-use MarbleUI\modules\Text;
 use \MarbleUI\modules\Core3D;
+use \MarbleUI\modules\Misc\ImagesController;
 
 class index3D
 {
     public AppGameKit $AppGameKit;
     private Core3D $Core3D;
-    var $textures;
+    private ImagesController $ImageController;
 
-    private $testID;
+    //var $textures;
+
 
     public function __construct()
     {
@@ -27,7 +28,6 @@ class index3D
         $agk->SetVirtualResolution(1920, 1080);
         $agk->SetVSync(1);
 
-        $this->testID = 2;
 
         $agk->SetWindowAllowResize(0);
         //$agk->SetSyncRate(60, 0);
@@ -36,94 +36,48 @@ class index3D
         $agk->SetScissor(0, 0, 0, 0);
         $agk->SetCameraRange(1, 0.01, 3000);
         $agk->SetSunActive(1);
-
+        //var_dump($agk);
         $this->Core3D = new Core3D($agk);
 
         //Загрузка текстур
-        $dir_link = "media/textures/";
-        $dir_data = scandir(realpath($dir_link));
-        $id = 0;
-        foreach ($dir_data as $file) {
-            if ($file != "." and $file != ".." and $file != "player.png") {
-                $path = $agk->getPath("textures/$file");
-                $path = str_replace('\\', '/', $path);
-                $agk->LoadImage($id, $path);
-                $this->textures[] = $id;
-                $id++;
-            }
-        }
+        $this->ImageController = new ImagesController($agk);
+        $this->ImageController->LoadTexturesDirectory('textures');
 
-        if ($this->testID == 1) {
-            //Создание объектов
-            for ($i = -300; $i <= 300; $i++) {
-                if ($i < 0) $y = 1;
-                else $y = -1;
+        $box_1 = $this->Core3D->CreateBox();
+        $box_1->SetPosition([0, 0, 0]);
+        $box_1->SetImage($this->ImageController->GetTextureByCode('brks_1'));
+        $box_1->SetTag('Mother_box');
 
-                $objectNumber = rand(0, 4);
+        $box_2 = $this->Core3D->CreateBox();
+        $box_2->SetPosition([-5, 0, 0]);
+        $box_2->SetImage($this->ImageController->GetTextureByCode('brks_2'));
+        $box_2->FixToObject($box_1);
 
-                switch ($objectNumber) {
-                    case 0:
-                        $object = $this->Core3D->CreateBox();
-                        break;
-                    case 1:
-                        $object = $this->Core3D->CreateSphere();
-                        break;
-                    case 2:
-                        $object = $this->Core3D->CreateCapsule();
-                        break;
-                    case 3:
-                        $object = $this->Core3D->CreateCone();
-                        break;
-                    case 4:
-                        $object = $this->Core3D->CreateCylinder();
-                        break;
-                }
+        $box_3 = $this->Core3D->CreateBox();
+        $box_3->SetPosition([5, 0, 0]);
+        $box_3->SetImage($this->ImageController->GetTextureByCode('brks_2'));
+        $box_3->FixToObject($box_1);
 
-                $object->SetPosition([$i * 2, $y, 0]);
-                $object->SetTag('MyBox');
-                $object->SetData('Strafe', false);
-                $object->SetScale([rand(0.2, 5), rand(0.2, 5), rand(0.2, 5)]);
-                $object->SetImage($this->textures[rand(1, $id)]);
-            }
-        }
+        $cylinder_1 = $this->Core3D->CreateCylinder(5, 0.5, 20);
+        $cylinder_1->SetImage($this->ImageController->GetTextureByCode('brks_1'));
+        $cylinder_1->FixToObject($box_1);
 
-        if ($this->testID == 2) {
-            $box_1 = $this->Core3D->CreateBox();
-            $box_1->SetPosition([0, 0, 0]);
-            $box_1->SetImage(1);
-            $box_1->SetTag('Mother_box');
+        $cylinder_2 = $this->Core3D->CreateCylinder(5, 0.5, 20);
+        $cylinder_2->SetRotationZ(90);
+        $cylinder_2->SetPosition([2.5, 0, 0]);
+        $cylinder_2->SetImage($this->ImageController->GetTextureByCode('brks_2'));
+        $cylinder_2->FixToObject($box_1);
 
-            $box_2 = $this->Core3D->CreateBox();
-            $box_2->SetPosition([-5, 0, 0]);
-            $box_2->SetImage(2);
-            $box_2->FixToObject($box_1->objectId);
+        $cylinder_3 = $this->Core3D->CreateCylinder(5, 0.5, 20);
+        $cylinder_3->SetRotationZ(90);
+        $cylinder_3->SetPosition([-2.5, 0, 0]);
+        $cylinder_3->SetImage($this->ImageController->GetTextureByCode('brks_2'));
+        $cylinder_3->FixToObject($box_1);
 
-            $box_2 = $this->Core3D->CreateBox();
-            $box_2->SetPosition([5, 0, 0]);
-            $box_2->SetImage(2);
-            $box_2->FixToObject($box_1->objectId);
-
-            $cylinder_1 = $this->Core3D->CreateCylinder(5, 0.5, 20);
-            $cylinder_1->SetImage(1);
-            $cylinder_1->FixToObject($box_1->objectId);
-
-            $cylinder_2 = $this->Core3D->CreateCylinder(5, 0.5, 20);
-            $cylinder_2->SetRotationZ(90);
-            $cylinder_2->SetPosition([2.5, 0, 0]);
-            $cylinder_2->SetImage(2);
-            $cylinder_2->FixToObject($box_1->objectId);
-
-            $cylinder_3 = $this->Core3D->CreateCylinder(5, 0.5, 20);
-            $cylinder_3->SetRotationZ(90);
-            $cylinder_3->SetPosition([-2.5, 0, 0]);
-            $cylinder_3->SetImage(2);
-            $cylinder_3->FixToObject($box_1->objectId);
-
-            $box_1->SetData('Strafe', false);
-        }
+        $box_1->SetData('Strafe', false);
 
         $plane = $this->Core3D->CreatePlane(10, 10);
-        $plane->SetImage(5);
+        $plane->SetImage($this->ImageController->GetTextureByCode('brks_1'));
         //$plane->RotateX(90);
         $plane->SetRotationX(90);
         $plane->SetTag("Plane");
@@ -135,41 +89,17 @@ class index3D
     {
         $agk = $this->AppGameKit;
 
-        if ($this->testID == 1) {
-            $boxs = $this->Core3D->GetObjectsWidthTag('MyBox');
-            /**
-             * @var \MarbleUI\modules\Objects3D\Object3D $box
-             */
-            foreach ($boxs as $box) {
+        $box = $this->Core3D->GetObjectWidthTag('Mother_box');
+        if ($box->GetY() > 2) $box->SetData('Strafe', false);
+        elseif ($box->GetY() < -2) $box->SetData('Strafe', true);
 
-                if ($box->GetX() != 0) {
-                    if ($box->GetData('Strafe')) {
-                        $box->MoveX(0.1);
-                    } else {
-                        $box->MoveX(-0.1);
-                    }
-                }
+        $strafe = $box->GetData('Strafe');
+        if ($strafe)
+            $box->MoveY(0.025);
+        else
+            $box->MoveY(-0.025);
 
-                if ($box->GetX() < 0) $box->SetData('Strafe', true);
-                if ($box->GetX() > 0) $box->SetData('Strafe', false);
-            }
-            $agk->MoveCameraLocalZ(1, -0.025);
-        }
-
-        if ($this->testID == 2) {
-            $box = $this->Core3D->GetObjectWidthTag('Mother_box');
-            if ($box->GetY() > 2) $box->SetData('Strafe', false);
-            elseif ($box->GetY() < -2) $box->SetData('Strafe', true);
-
-            $strafe = $box->GetData('Strafe');
-            if ($strafe)
-                $box->MoveY(0.025);
-            else
-                $box->MoveY(-0.025);
-
-            $box->RotateY(1);
-            //$this->Core3D->GetObjectWidthTag("Plane")->RotateX(1);
-        }
+        $box->RotateY(1);
 
         $agk->Print(floor($agk->ScreenFPS()));
         $agk->Sync();
