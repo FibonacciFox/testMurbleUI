@@ -3,12 +3,16 @@
 use fibonaccifox\AppGameKit;
 use \MarbleUI\modules\Core3D;
 use \MarbleUI\modules\Misc\ImagesController;
+use \MarbleUI\modules\Misc\KeyBoardController;
+use \MarbleUI\modules\Misc\Camera3D;
 
 class index3D
 {
     public AppGameKit $AppGameKit;
     private Core3D $Core3D;
     private ImagesController $ImageController;
+    private KeyBoardController $KB;
+    private Camera3D $Camera;
 
     //var $textures;
 
@@ -36,6 +40,7 @@ class index3D
         $agk->SetScissor(0, 0, 0, 0);
         $agk->SetCameraRange(1, 0.01, 3000);
         $agk->SetSunActive(1);
+        //$agk->SetScreenResolution(1920/5, 1080/5);
         //var_dump($agk);
         $this->Core3D = new Core3D($agk);
 
@@ -83,6 +88,9 @@ class index3D
         $plane->SetTag("Plane");
         $plane->SetY(-2.5);
         $plane->SetScale([3, 3, 1]);
+
+        $this->KB = new KeyBoardController($agk);
+        $this->Camera = new Camera3D($agk);
     }
 
     public function Loop()
@@ -100,6 +108,19 @@ class index3D
             $box->MoveY(-0.025);
 
         $box->RotateY(1);
+
+        $KB = $this->KB;
+
+        if ($KB->KeyW())
+            $this->Camera->MoveZ(0.1);
+        if ($KB->KeyS())
+            $this->Camera->MoveZ(-0.1);
+        if ($KB->KeyA())
+            $this->Camera->MoveX(-0.1);
+        if ($KB->KeyD())
+            $this->Camera->MoveX(0.1);
+
+        $this->Camera->LockAt(0,0,0,0);
 
         $agk->Print(floor($agk->ScreenFPS()));
         $agk->Sync();
