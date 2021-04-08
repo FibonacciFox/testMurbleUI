@@ -81,6 +81,17 @@ class index3D
 
         $box_1->SetData('Strafe', false);
 
+
+        $this->ImageController->LoadTexturesDirectory('objects/Ship1/Textures');
+
+        $ship = $this->Core3D->LoadSimpleObject("objects/Ship1/StarSparrow01.obj");
+        $ship->SetPosition([5, 0, 5]);
+        $ship->SetImage( $this->ImageController->GetTextureByCode('StarSparrow_Black') );
+        $ship->RotateY(180);
+
+        $ship->SetTag('Main_Ship');
+        //$ship->SetImage( $this->ImageController->GetTextureByCode('StarSparrow_Normal'), 2 );
+
         $plane = $this->Core3D->CreatePlane(10, 10);
         $plane->SetImage($this->ImageController->GetTextureByCode('brks_1'));
         //$plane->RotateX(90);
@@ -91,6 +102,11 @@ class index3D
 
         $this->KB = new KeyBoardController($agk);
         $this->Camera = new Camera3D($agk);
+
+        $this->Camera->SetPosition([0, 2, 7]);
+        $this->Camera->SetRotation([0,180,0]);
+        $this->Camera->SetFov(90);
+        $this->Camera->FixToObject($ship->objectId);
     }
 
     public function Loop()
@@ -111,16 +127,22 @@ class index3D
 
         $KB = $this->KB;
 
-        if ($KB->KeyW())
-            $this->Camera->MoveZ(0.1);
-        if ($KB->KeyS())
-            $this->Camera->MoveZ(-0.1);
-        if ($KB->KeyA())
-            $this->Camera->MoveX(-0.1);
-        if ($KB->KeyD())
-            $this->Camera->MoveX(0.1);
+        $ship = $this->Core3D->GetObjectWidthTag('Main_Ship');
 
-        $this->Camera->LockAt(0,0,0,0);
+        if ($KB->KeyW())
+            $ship->MoveZ(-0.1);
+        if ($KB->KeyS())
+            $ship->MoveZ(0.1);
+        if ($KB->KeyA())
+            $ship->MoveX(0.1);
+        if ($KB->KeyD())
+            $ship->MoveX(-0.1);
+        if ($KB->KeyQ())
+            $ship->RotateY(-1);
+        if ($KB->KeyE())
+            $ship->RotateY(1);
+
+        //$this->Camera->LockAt(0,0,0,0);
 
         $agk->Print(floor($agk->ScreenFPS()));
         $agk->Sync();

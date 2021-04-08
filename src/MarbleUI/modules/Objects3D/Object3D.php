@@ -62,9 +62,10 @@ class Object3D extends BaseObject
      */
     public function MoveX(float $x)
     {
-        $this->CheckPosition('x');
+        /*$this->CheckPosition('x');
         $this->x += $x;
-        $this->UpdatePosition();
+        $this->UpdatePosition();*/
+        $this->agk->MoveObjectLocalX($this->objectId, $x);
     }
 
     /**
@@ -74,9 +75,10 @@ class Object3D extends BaseObject
      */
     public function MoveY(float $y)
     {
-        $this->CheckPosition('y');
+        /*$this->CheckPosition('y');
         $this->y += $y;
-        $this->UpdatePosition();
+        $this->UpdatePosition();*/
+        $this->agk->MoveObjectLocalY($this->objectId, $y);
     }
 
     /**
@@ -86,9 +88,10 @@ class Object3D extends BaseObject
      */
     public function MoveZ(float $z)
     {
-        $this->CheckPosition('z');
+        /*$this->CheckPosition('z');
         $this->z += $z;
-        $this->UpdatePosition();
+        $this->UpdatePosition();*/
+        $this->agk->MoveObjectLocalZ($this->objectId, $z);
     }
 
     /**

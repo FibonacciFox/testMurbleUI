@@ -10,6 +10,7 @@ use MarbleUI\modules\Objects3D\Object3D;
 use MarbleUI\modules\Objects3D\ObjectCapsule;
 use MarbleUI\modules\Objects3D\ObjectCone;
 use MarbleUI\modules\Objects3D\ObjectCylinder;
+use MarbleUI\modules\Objects3D\ObjectModel;
 use MarbleUI\modules\Objects3D\ObjectPlane;
 use MarbleUI\modules\Objects3D\ObjectSphere;
 
@@ -167,6 +168,24 @@ class Core3D
     public function CreateCylinder($height = 1, $diameter = 1, $segments = 10)
     {
         $object = new ObjectCylinder($this->agk, $height, $diameter, $segments);
+        $this->objectList[$object->objectId] = $object;
+        return $object;
+    }
+
+    /**
+     * Загружает объект из файла, в настоящее время поддерживаются форматы .X .3ds .md3 .smd .md5 .lwo. ac .b3d .dae
+     * .3d .lws .ms3d .blend .m3 .obj и .ago. Эта команда не будет загружать никаких анимационных или костных данных и
+     * объединит вершины в один объект с как можно меньшим количеством сеток. Для загрузки анимации и костных данных
+     * используйте вместо этого LoadObjectWithChildren.
+     *
+     * @param     $file
+     * @param int $height
+     *
+     * @return ObjectModel
+     */
+    public function LoadSimpleObject($file, $height = 1)
+    {
+        $object = new ObjectModel($this->agk, $file, $height = 1);
         $this->objectList[$object->objectId] = $object;
         return $object;
     }
