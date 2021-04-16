@@ -82,16 +82,6 @@ class ShipController
             $this->shipSpeed += 0.01;
         }
 
-        //$ship->MoveZ(0.1);
-//        if ($KB->KeyA())
-//            $ship->MoveX(0.1);
-//        if ($KB->KeyD())
-//            $ship->MoveX(-0.1);
-//        if ($KB->KeyQ())
-//            $ship->RotateZ(-0.5);
-//        if ($KB->KeyE())
-//            $ship->RotateZ(0.5);
-
         $aZ = $ship->GetAngleZ();
 
         if ($KB->KeyA()) {
@@ -103,13 +93,6 @@ class ShipController
             $this->pivot->MoveX(abs(0.1 + abs($this->shipSpeed/3)));
             if ($aZ < 50)
                 $ship->RotateZ(1 - abs(0.1 * $this->shipSpeed));
-        }
-
-        if (!$KB->KeyA() and !$KB->KeyD()) {
-            if ($aZ > 1)
-                $ship->RotateZ(-1);
-            if ($aZ < -1)
-                $ship->RotateZ(1);
         }
 
         if ($KB->KeyQ()) {
@@ -136,16 +119,24 @@ class ShipController
             }
         }
 
+        $xRotate = false;
         if ($this->useMouse) {
             $thisPointerX = $agk->GetPointerX();
-            if ($this->main->deviceCenterX + 5 > $thisPointerX) {
+            $aZ = $ship->GetAngleZ();
+            if ($this->main->deviceCenterX - 5 > $thisPointerX) {
                 $rot = ($this->main->deviceCenterX - $thisPointerX) / 30;
                 $this->pivot->RotateY(-$rot);
-                $ship->SetRotationY(-($rot*2) - 180);
-            } else if ($this->main->deviceCenterX - 5 < $thisPointerX) {
+                //$ship->SetRotationY(-($rot*2) - 180);
+                $xRotate = true;
+                if ($aZ > -50)
+                    $ship->RotateZ(-0.8 + abs(0.1 * $this->shipSpeed));
+            } else if ($this->main->deviceCenterX + 5 < $thisPointerX) {
                 $rot = ($thisPointerX - $this->main->deviceCenterX) / 30;
                 $this->pivot->RotateY($rot);
-                $ship->SetRotationY(($rot*2) - 180);
+                //$ship->SetRotationY(($rot*2) - 180);
+                $xRotate = true;
+                if ($aZ < 50)
+                    $ship->RotateZ(0.8 - abs(0.1 * $this->shipSpeed));
             }
 
             $thisPointerY = $agk->GetPointerY();
@@ -161,6 +152,13 @@ class ShipController
 
             $agk->SetRawMousePosition($this->main->deviceCenterX, $this->main->deviceCenterY);
             //$agk->SetCameraRotation(1, 0, $this->rotateY, 0);
+        }
+
+        if (!$KB->KeyA() and !$KB->KeyD() and !$xRotate) {
+            if ($aZ > 1)
+                $ship->RotateZ(-1);
+            if ($aZ < -1)
+                $ship->RotateZ(1);
         }
     }
 }
