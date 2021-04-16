@@ -19,99 +19,200 @@ use fibonaccifox\AppGameKit;
 class Camera3D
 {
 
+    /**
+     * @var AppGameKit
+     */
     public AppGameKit $AppGameKit;
+    /**
+     * @var int
+     */
     private $DefaultCameraID = 1;
 
+    /**
+     * Camera3D constructor.
+     *
+     * @param AppGameKit $AppGameKit
+     */
     public function __construct(AppGameKit $AppGameKit)
     {
         $this->AppGameKit = $AppGameKit;
     }
 
+    /**
+     * Получить позицию по X камеры
+     *
+     * @return float
+     */
     public function GetX()
     {
         return $this->AppGameKit->GetCameraX($this->DefaultCameraID);
     }
 
+    /**
+     * Получить позицию по Y камеры
+     *
+     * @return float
+     */
     public function GetY()
     {
         return $this->AppGameKit->GetCameraY($this->DefaultCameraID);
     }
 
+    /**
+     * Получить позицию по Z камеры
+     *
+     * @return float
+     */
     public function GetZ()
     {
         return $this->AppGameKit->GetCameraZ($this->DefaultCameraID);
     }
 
+    /**
+     * Получить глобальную позицию камеры по X
+     *
+     * @return float
+     */
     public function GetGlobalX()
     {
         return $this->AppGameKit->GetCameraWorldX($this->DefaultCameraID);
     }
 
+    /**
+     * Получить глобальную позицию камеры по Y
+     *
+     * @return float
+     */
     public function GetGlobalY()
     {
         return $this->AppGameKit->GetCameraWorldY($this->DefaultCameraID);
     }
 
+    /**
+     * Получить глобальную позицию камеры по Z
+     *
+     * @return float
+     */
     public function GetGlobalZ()
     {
         return $this->AppGameKit->GetCameraWorldZ($this->DefaultCameraID);
     }
 
+    /**
+     * Получить угол камеры по X
+     *
+     * @return float
+     */
     public function GetAngleX()
     {
         return $this->AppGameKit->GetCameraAngleX($this->DefaultCameraID);
     }
 
+    /**
+     * Получить угол камеры по Y
+     *
+     * @return float
+     */
     public function GetAngleY()
     {
         return $this->AppGameKit->GetCameraAngleY($this->DefaultCameraID);
     }
 
+    /**
+     * Получить угол камеры по Z
+     *
+     * @return float
+     */
     public function GetAngleZ()
     {
         return $this->AppGameKit->GetCameraAngleZ($this->DefaultCameraID);
     }
 
+    /**
+     * Здвинуть камеру по X
+     *
+     * @param float $amount
+     */
     public function MoveX(float $amount)
     {
         $this->AppGameKit->MoveCameraLocalX($this->DefaultCameraID, $amount);
     }
 
+    /**
+     * Здвинуть камеру по Y
+     *
+     * @param float $amount
+     */
     public function MoveY(float $amount)
     {
         $this->AppGameKit->MoveCameraLocalY($this->DefaultCameraID, $amount);
     }
 
+    /**
+     * Здвинуть камеру по Z
+     *
+     * @param float $amount
+     */
     public function MoveZ(float $amount)
     {
         $this->AppGameKit->MoveCameraLocalZ($this->DefaultCameraID, $amount);
     }
 
+    /**
+     * Зафикисровать камеру на объекте. Камера будет перемещаться и крутиться вместе с этим объектом
+     *
+     * @param int $objectId
+     */
     public function FixToObject(int $objectId)
     {
         $this->AppGameKit->FixCameraToObject($this->DefaultCameraID, $objectId);
     }
 
+    /**
+     * Установить позицию камеры
+     *
+     * @param array $position
+     */
     public function SetPosition(array $position)
     {
         $this->AppGameKit->SetCameraPosition($this->DefaultCameraID, $position[0], $position[1], $position[2]);
     }
 
+    /**
+     * Установить позицию камеры по X
+     *
+     * @param $x
+     */
     public function SetX($x)
     {
         $this->AppGameKit->SetCameraPosition($this->DefaultCameraID, $x, $this->GetY(), $this->GetZ());
     }
 
+    /**
+     * Установить позицию камеры по Y
+     *
+     * @param $y
+     */
     public function SetY($y)
     {
         $this->AppGameKit->SetCameraPosition($this->DefaultCameraID, $this->GetX(), $y, $this->GetZ());
     }
 
+    /**
+     * Установить позицию камеры по Z
+     *
+     * @param $z
+     */
     public function SetZ($z)
     {
         $this->AppGameKit->SetCameraPosition($this->DefaultCameraID, $this->GetX(), $this->GetY(), $z);
     }
 
+    /**
+     * Задать поворот камеры
+     *
+     * @param array $rotation
+     */
     public function SetRotation(array $rotation)
     {
         $this->AppGameKit->SetCameraRotation($this->DefaultCameraID, $rotation[0], $rotation[1], $rotation[2]);

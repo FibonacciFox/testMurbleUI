@@ -6,22 +6,55 @@ use \MarbleUI\modules\Misc\ImagesController;
 use \MarbleUI\modules\Misc\KeyBoardController;
 use \MarbleUI\modules\Misc\Camera3D;
 
+//Классы для примера!!
+
+use MarbleUI\modules\For3DExample\LevelController;
+use MarbleUI\modules\For3DExample\ShipController;
+
+//use php\gui\UXForm;
+//use php\gui\UXApplication;
+//use php\gui\UXLabel;
+//use php\lang\Thread;
+//use php\framework;
+//use php\gui;
+//use php\gui\UXButton;
+
 class index3D
 {
     public AppGameKit $AppGameKit;
-    private Core3D $Core3D;
-    private ImagesController $ImageController;
-    private KeyBoardController $KB;
-    private Camera3D $Camera;
+    public Core3D $Core3D;
+    public ImagesController $ImageController;
+    public KeyBoardController $KB;
+    public Camera3D $Camera;
 
-    //var $textures;
+    var int $width;
+    var int $height;
 
+    var int $deviceCenterX;
+    var int $deviceCenterY;
 
-    public function __construct()
+    public LevelController $LC;
+    public ShipController $SC;
+
+    private array $gui;
+
+    public bool $Prepare;
+
+    public function __construct($deviceWidth, $deviceHeight)
     {
+        global $App;
+        $App = $this;
+        $this->Prepare = false;
+
+        $this->width = $deviceWidth;
+        $this->height = $deviceHeight;
+
+        $this->deviceCenterX = floor($deviceWidth / 2);
+        $this->deviceCenterY = floor($deviceHeight / 2);
+
         $this->AppGameKit = new AppGameKit($this);
         $agk = $this->AppGameKit;
-        $agk->Init(1920, 1080, false);
+        $agk->Init($this->width, $this->height, false);
     }
 
     public function Begin()
@@ -29,118 +62,59 @@ class index3D
         var_dump("Begin!");
         $agk = $this->AppGameKit;
         $agk->SetWindowTitle('Hello World');
-        $agk->SetVirtualResolution(1920, 1080);
+        $agk->SetVirtualResolution($this->width, $this->height);
         $agk->SetVSync(1);
 
-
         $agk->SetWindowAllowResize(0);
-        //$agk->SetSyncRate(60, 0);
         $agk->SetAntiAliasMode(1);
         $agk->SetOrientationAllowed(1, 1, 1, 1);
         $agk->SetScissor(0, 0, 0, 0);
         $agk->SetCameraRange(1, 0.01, 3000);
         $agk->SetSunActive(1);
-        //$agk->SetScreenResolution(1920/5, 1080/5);
-        //var_dump($agk);
+
+        $agk->SetRawMouseVisible(0);
+
+        $agk->Print("Create classes...");
+        $agk->Sync();
+
         $this->Core3D = new Core3D($agk);
-
-        //Загрузка текстур
-        $this->ImageController = new ImagesController($agk);
-        $this->ImageController->LoadTexturesDirectory('textures');
-
-        $box_1 = $this->Core3D->CreateBox();
-        $box_1->SetPosition([0, 0, 0]);
-        $box_1->SetImage($this->ImageController->GetTextureByCode('brks_1'));
-        $box_1->SetTag('Mother_box');
-
-        $box_2 = $this->Core3D->CreateBox();
-        $box_2->SetPosition([-5, 0, 0]);
-        $box_2->SetImage($this->ImageController->GetTextureByCode('brks_2'));
-        $box_2->FixToObject($box_1);
-
-        $box_3 = $this->Core3D->CreateBox();
-        $box_3->SetPosition([5, 0, 0]);
-        $box_3->SetImage($this->ImageController->GetTextureByCode('brks_2'));
-        $box_3->FixToObject($box_1);
-
-        $cylinder_1 = $this->Core3D->CreateCylinder(5, 0.5, 20);
-        $cylinder_1->SetImage($this->ImageController->GetTextureByCode('brks_1'));
-        $cylinder_1->FixToObject($box_1);
-
-        $cylinder_2 = $this->Core3D->CreateCylinder(5, 0.5, 20);
-        $cylinder_2->SetRotationZ(90);
-        $cylinder_2->SetPosition([2.5, 0, 0]);
-        $cylinder_2->SetImage($this->ImageController->GetTextureByCode('brks_2'));
-        $cylinder_2->FixToObject($box_1);
-
-        $cylinder_3 = $this->Core3D->CreateCylinder(5, 0.5, 20);
-        $cylinder_3->SetRotationZ(90);
-        $cylinder_3->SetPosition([-2.5, 0, 0]);
-        $cylinder_3->SetImage($this->ImageController->GetTextureByCode('brks_2'));
-        $cylinder_3->FixToObject($box_1);
-
-        $box_1->SetData('Strafe', false);
-
-
-        $this->ImageController->LoadTexturesDirectory('objects/Ship1/Textures');
-
-        $ship = $this->Core3D->LoadSimpleObject("objects/Ship1/StarSparrow01.obj");
-        $ship->SetPosition([5, 0, 5]);
-        $ship->SetImage( $this->ImageController->GetTextureByCode('StarSparrow_Black') );
-        $ship->RotateY(180);
-
-        $ship->SetTag('Main_Ship');
-        //$ship->SetImage( $this->ImageController->GetTextureByCode('StarSparrow_Normal'), 2 );
-
-        $plane = $this->Core3D->CreatePlane(10, 10);
-        $plane->SetImage($this->ImageController->GetTextureByCode('brks_1'));
-        //$plane->RotateX(90);
-        $plane->SetRotationX(90);
-        $plane->SetTag("Plane");
-        $plane->SetY(-2.5);
-        $plane->SetScale([3, 3, 1]);
-
         $this->KB = new KeyBoardController($agk);
         $this->Camera = new Camera3D($agk);
+        $this->ImageController = new ImagesController($agk);
 
-        $this->Camera->SetPosition([0, 2, 7]);
-        $this->Camera->SetRotation([0,180,0]);
-        $this->Camera->SetFov(90);
-        $this->Camera->FixToObject($ship->objectId);
+        $agk->Print("Loading textures...");
+        $agk->Sync();
+
+        //Загрузка текстур
+        $this->ImageController->LoadTexturesDirectory('textures'); //Поверхности
+        $this->ImageController->LoadTexturesDirectory('objects/Ship1/Textures'); //Кораблик
+
+        $agk->Print("Loading map...");
+        $agk->Sync();
+
+        $this->LC = new LevelController($agk, $this->Core3D, $this->ImageController); //Грузим уровень
+
+        $agk->Print("Loading game objects...");
+        $agk->Sync();
+
+        $this->SC = new ShipController($agk, $this->Core3D, $this->ImageController, $this->KB, $this->Camera, $this);
+        $this->Prepare = true;
     }
 
     public function Loop()
     {
         $agk = $this->AppGameKit;
+        $this->LC->Update();
+        $this->SC->Update();
 
-        $box = $this->Core3D->GetObjectWidthTag('Mother_box');
-        if ($box->GetY() > 2) $box->SetData('Strafe', false);
-        elseif ($box->GetY() < -2) $box->SetData('Strafe', true);
+        $ship = $this->Core3D->GetObjectWidthTag("Main_Ship");
+        $pos = $ship->GetPosition();
 
-        $strafe = $box->GetData('Strafe');
-        if ($strafe)
-            $box->MoveY(0.025);
-        else
-            $box->MoveY(-0.025);
-
-        $box->RotateY(1);
-
-        $KB = $this->KB;
-
-        $ship = $this->Core3D->GetObjectWidthTag('Main_Ship');
-
-        if ($KB->KeyW())
-            $ship->MoveZ(-0.1);
-        if ($KB->KeyS())
-            $ship->MoveZ(0.1);
-        if ($KB->KeyA())
-            $ship->MoveX(0.1);
-        if ($KB->KeyD())
-            $ship->MoveX(-0.1);
-        if ($KB->KeyQ())
-            $ship->RotateY(-1);
-        if ($KB->KeyE())
-            $ship->RotateY(1);
+//        uiLater(function () use ($pos) {
+//            global $LabelShip;
+//            if ($LabelShip)
+//                $LabelShip->text = "X: " . round($pos[0], 2) . " Y: " . round($pos[1], 2) . " Z: " . round($pos[2], 2);
+//        });
 
         //$this->Camera->LockAt(0,0,0,0);
 
@@ -155,4 +129,48 @@ class index3D
     }
 }
 
-$App = new index3D();
+$App = new index3D(1280, 720);
+
+//UXApplication::launch(function (UXForm $form) {
+//    /** @var index3D $App */
+//    global $LabelShip, $App;
+//    $form->title = 'Form';
+//    $form->size = [500, 500];
+//    $form->x = 0;
+//    $form->show();
+//    $label = new UXLabel();
+//    $label->text = "Launch...";
+//    $label->position = [10, 10];
+//    $label->font = new \php\gui\text\UXFont(18, "Arial");
+//    $label->textColor = "black";
+//    $form->add($label);
+//    $LabelShip = $label;
+//    $thread = new Thread(function () use ($form) {
+//        $App = new index3D(1280, 720);
+//    });
+//    $thread->setDaemon(true);
+//    $thread->start();
+//
+//    var_dump("Wait APP!");
+//    while ($App == null) {
+//        usleep(500000);
+//    }
+//    var_dump("Wait prepare!");
+//    while ($App->Prepare == false) {
+//    }
+//    var_dump("Complete!");
+//
+//    $button = new UXButton();
+//    $button->size = [100, 25];
+//    $button->position = [10, 50];
+//    $button->text = "NewBox";
+//    $button->on('click', function (){
+//        global $App;
+//        /** @var Core3D $core3D */
+//        $core3D = $App->Core3D;
+//        $core3D->CreateBox([4,4,4]);
+//    });
+//    $form->add($button);
+//
+//});
+
