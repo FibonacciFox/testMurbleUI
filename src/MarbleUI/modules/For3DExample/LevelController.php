@@ -24,7 +24,7 @@ class LevelController
         $this->Core3D = $Core3D;
         $this->ImageController = $ImageController;
 
-        $box_1 = $this->Core3D->CreateBox();
+        /*$box_1 = $this->Core3D->CreateBox();
         $box_1->SetPosition([0, 0, 0]);
         $box_1->SetImage($this->ImageController->GetTextureByCode('brks_1'));
         $box_1->SetTag('Mother_box');
@@ -61,12 +61,16 @@ class LevelController
         $plane->SetRotationX(90);
         $plane->SetTag("Plane");
         $plane->SetY(-2.5);
-        $plane->SetScale([3, 3, 1]);
+        $plane->SetScale([3, 3, 1]);*/
+
+        $MapId = $agk->CreateObjectFromHeightMap($agk->getPath("./map/textures/displacement2k.png"), 3000, 60, 3000, 4, 16);
+        $this->ImageController->LoadTexture('map/textures/albedo2k.png', false, true);
+        $agk->SetObjectImage($MapId, $this->ImageController->GetTextureByCode('albedo2k'), 0);
     }
 
     public function Update()
     {
-        $agk = $this->AppGameKit;
+        /*$agk = $this->AppGameKit;
 
         $box = $this->Core3D->GetObjectWidthTag('Mother_box');
         if ($box->GetY() > 2) $box->SetData('Strafe', false);
@@ -78,7 +82,7 @@ class LevelController
         else
             $box->MoveY(-0.025);
 
-        $box->RotateY(1);
+        $box->RotateY(1);*/
     }
 
 }

@@ -71,6 +71,8 @@ class index3D
         $agk->SetScissor(0, 0, 0, 0);
         $agk->SetCameraRange(1, 0.01, 3000);
         $agk->SetSunActive(1);
+        $agk->SetSkyBoxVisible(true);
+        $agk->SetSkyBoxSunVisible(true);
 
         $agk->SetRawMouseVisible(0);
 
@@ -129,7 +131,7 @@ class index3D
     }
 }
 
-$App = new index3D(1280, 720);
+$App = new index3D(1920, 1080);
 
 //UXApplication::launch(function (UXForm $form) {
 //    /** @var index3D $App */
