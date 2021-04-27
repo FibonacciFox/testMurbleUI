@@ -11,6 +11,7 @@ use MarbleUI\modules\Objects3D\ObjectCapsule;
 use MarbleUI\modules\Objects3D\ObjectCone;
 use MarbleUI\modules\Objects3D\ObjectCylinder;
 use MarbleUI\modules\Objects3D\ObjectModel;
+use MarbleUI\modules\Objects3D\ObjectParticles;
 use MarbleUI\modules\Objects3D\ObjectPlane;
 use MarbleUI\modules\Objects3D\ObjectSphere;
 
@@ -28,6 +29,13 @@ class Core3D
      * @var array $objectList
      */
     var $objectList;
+
+    /**
+     * Список всех созданных частиц
+     *
+     * @var array $particlesList
+     */
+    var $particlesList;
 
     protected AppGameKit $agk;
 
@@ -188,6 +196,36 @@ class Core3D
         $object = new ObjectModel($this->agk, $file, $height = 1);
         $this->objectList[$object->objectId] = $object;
         return $object;
+    }
+
+    /**
+     * Создает генератор частиц
+     *
+     * @param array|int[] $position
+     *
+     * @return ObjectParticles
+     */
+    public function CreateParticle(array $position = [0, 0, 0]): ObjectParticles
+    {
+        $particle = new ObjectParticles($this->agk, $this, $position);
+        $this->particlesList[$particle->objectId] = $particle;
+        return $particle;
+    }
+
+    /**
+     * Обновляет положение (излучателей) привязанных частиц к объектам
+     */
+    public function ParticlesSync()
+    {
+        /** @var ObjectParticles $particle */
+        foreach ($this->particlesList as $particle) {
+            if( $particle->IsFixed() and !$particle->isFree() ){
+                /** @var Object3D $fixedObject */
+                $fixedObject = $particle->GetFixedObject();
+                $offset = $fixedObject->GetPosition();
+                $particle->SetPosition($offset[0] + $particle->GetFixOffsetX(), $offset[1] + $particle->GetFixOffsetY(), $offset[2] + $particle->GetFixOffsetZ());
+            }
+        }
     }
 
 }

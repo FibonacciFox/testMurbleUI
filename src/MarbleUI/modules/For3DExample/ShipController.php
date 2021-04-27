@@ -26,6 +26,8 @@ class ShipController
 
     private $pivot;
 
+    private $engineParticles;
+
 
     public function __construct(AppGameKit $agk, Core3D $Core3D, ImagesController $ImageController, KeyBoardController $KeyBoardController, Camera3D $Camera, $mainClass)
     {
@@ -55,6 +57,21 @@ class ShipController
         $this->Camera->SetFov(70);
         $this->Camera->FixToObject($pivot->objectId);
         $this->maxSpeed = 1;
+
+        $this->engineParticles = $this->Core3D->CreateParticle([0,0,0]);
+        var_dump( $this->engineParticles);
+        $this->engineParticles->SetDirection(-2, 0, 0, 0);
+        $this->engineParticles->SetLife(1);
+        $this->engineParticles->SetSize(0.1);
+        $this->engineParticles->SetParticlesMax(30);
+        $this->engineParticles->SetImage($this->ImageController->GetTextureByCode("engine_particle"));
+        $this->engineParticles->SetColorInterpolation(1);
+        $this->engineParticles->AddColorKeyFrame(0, 255, 0, 0);
+        $this->engineParticles->AddColorKeyFrame(1, 255, 255, 255, 0);
+        $this->engineParticles->AddScaleKeyFrame(0, 1);
+        $this->engineParticles->AddScaleKeyFrame(1, 0.1);
+
+        //$this->engineParticles->VelocityRange()
     }
 
     public function Update()
