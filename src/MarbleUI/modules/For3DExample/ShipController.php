@@ -58,7 +58,7 @@ class ShipController
         $this->Camera->FixToObject($pivot->objectId);
         $this->maxSpeed = 1;
 
-        $this->engineParticles = $this->Core3D->CreateParticle([0,0,0]);
+        /*$this->engineParticles = $this->Core3D->CreateParticle([0,0,0]);
         var_dump( $this->engineParticles);
         $this->engineParticles->SetDirection(-2, 0, 0, 0);
         $this->engineParticles->SetLife(1);
@@ -69,7 +69,7 @@ class ShipController
         $this->engineParticles->AddColorKeyFrame(0, 255, 0, 0);
         $this->engineParticles->AddColorKeyFrame(1, 255, 255, 255, 0);
         $this->engineParticles->AddScaleKeyFrame(0, 1);
-        $this->engineParticles->AddScaleKeyFrame(1, 0.1);
+        $this->engineParticles->AddScaleKeyFrame(1, 0.1);*/
 
         //$this->engineParticles->VelocityRange()
     }

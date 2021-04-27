@@ -91,6 +91,11 @@ class index3D
         $this->ImageController->LoadTexturesDirectory('textures'); //Поверхности
         $this->ImageController->LoadTexturesDirectory('objects/Ship1/Textures'); //Кораблик
 
+        /*$id = $this->AppGameKit->Create3DParticles(0,0,0);
+        $this->AppGameKit->SetParticlesDirection($id, -2, 0, 0);
+        $this->AppGameKit->SetParticlesLife($id, 1);
+        $this->AppGameKit->SetParticlesImage($id, $this->ImageController->GetTextureByCode("engine_particle"));*/
+
         $agk->Print("Loading map...");
         $agk->Sync();
 
