@@ -91,10 +91,18 @@ class index3D
         $this->ImageController->LoadTexturesDirectory('textures'); //Поверхности
         $this->ImageController->LoadTexturesDirectory('objects/Ship1/Textures'); //Кораблик
 
-        /*$id = $this->AppGameKit->Create3DParticles(0,0,0);
-        $this->AppGameKit->SetParticlesDirection($id, -2, 0, 0);
-        $this->AppGameKit->SetParticlesLife($id, 1);
-        $this->AppGameKit->SetParticlesImage($id, $this->ImageController->GetTextureByCode("engine_particle"));*/
+        $id = $this->AppGameKit->Create3DParticles(0,0,0);
+        $this->AppGameKit->Set3DParticlesDirection($id, -3, 0, 0, 0);
+        $this->AppGameKit->Set3DParticlesLife($id, 5);
+        $this->AppGameKit->Set3DParticlesDirectionRange($id, 10, 10);
+        $this->AppGameKit->Set3DParticlesImage($id, $this->ImageController->GetTextureByCode("engine_particle"));
+        $this->AppGameKit->Set3DParticlesActive($id, true);
+        $this->AppGameKit->Set3DParticlesSize($id, 1);
+        $this->AppGameKit->Set3DParticlesMax($id, -1);
+        $this->AppGameKit->Add3DParticlesScaleKeyFrame($id, 0, 1);
+        $this->AppGameKit->Add3DParticlesScaleKeyFrame($id, 5, 3);
+        $this->AppGameKit->Add3DParticlesColorKeyFrame($id, 0, 255, 0, 0, 255);
+        $this->AppGameKit->Add3DParticlesColorKeyFrame($id, 5, 255, 255, 255, 0);
 
         $agk->Print("Loading map...");
         $agk->Sync();

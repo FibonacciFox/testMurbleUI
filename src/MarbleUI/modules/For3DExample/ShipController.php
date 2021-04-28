@@ -45,7 +45,8 @@ class ShipController
         $ship->RotateY(180);
 
         $pivot = $this->Core3D->CreateBox([0.1, 0.1, 0.1]);
-        $pivot->SetPosition([1500, 40, 1500]);
+        //$pivot->SetPosition([1500, 40, 1500]);
+        $pivot->SetPosition([0, 0, 0]);
         $this->pivot = $pivot;
         $ship->FixToObject($pivot);
 
@@ -58,8 +59,8 @@ class ShipController
         $this->Camera->FixToObject($pivot->objectId);
         $this->maxSpeed = 1;
 
-        /*$this->engineParticles = $this->Core3D->CreateParticle([0,0,0]);
-        var_dump( $this->engineParticles);
+        /*$this->engineParticles = *//*$this->Core3D->CreateParticle([0.0,0.0,0.0]);*/
+        /*var_dump( $this->engineParticles);
         $this->engineParticles->SetDirection(-2, 0, 0, 0);
         $this->engineParticles->SetLife(1);
         $this->engineParticles->SetSize(0.1);

@@ -22,7 +22,7 @@ class ObjectParticles extends BaseObject
 
     public function __construct(AppGameKit $agk, Core3D $core3D, $position = [0, 0, 0])
     {
-        $objectID = $agk->Create3DParticles($position[0], $position[1], $position[2]);
+        $objectID = $agk->Create3DParticles(0, 0, 0);
         var_dump($objectID);
         $this->objectId = $objectID;
         $this->softDelete = false;
