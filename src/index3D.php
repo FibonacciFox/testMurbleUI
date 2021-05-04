@@ -73,12 +73,13 @@ class index3D
         $agk->SetAntiAliasMode(1);
         $agk->SetOrientationAllowed(1, 1, 1, 1);
         $agk->SetScissor(0, 0, 0, 0);
-        $agk->SetCameraRange(1, 0.01, 3000);
+        $agk->SetCameraRange(1, 0.01, 4000);
         $agk->SetSunActive(1);
         $agk->SetSkyBoxVisible(true);
         $agk->SetSkyBoxSunVisible(true);
-
         $agk->SetRawMouseVisible(0);
+        //$agk->SetFogRange(3000, 4000);
+        //$agk->SetFogMode(1);
 
         //$agk->Print("Create classes...");
         //$agk->Sync();
@@ -94,6 +95,7 @@ class index3D
         //Загрузка текстур
         $this->ImageController->LoadTexturesDirectory('textures'); //Поверхности
         $this->ImageController->LoadTexturesDirectory('objects/Ship1/Textures'); //Кораблик
+        $this->ImageController->LoadTexturesDirectory('ui');
 
         /*$id = $this->AppGameKit->Create3DParticles(0,0,0);
         $this->AppGameKit->Set3DParticlesDirection($id, -3, 0, 0, 0);
@@ -138,7 +140,7 @@ class index3D
 
         //$this->Camera->LockAt(0,0,0,0);
 
-        $agk->Print(floor($agk->ScreenFPS()));
+        //$agk->Print(floor($agk->ScreenFPS()));
         //$agk->Print();
         $agk->Sync();
         //;

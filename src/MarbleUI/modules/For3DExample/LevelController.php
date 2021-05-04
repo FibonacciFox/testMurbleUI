@@ -63,9 +63,24 @@ class LevelController
         $plane->SetY(-2.5);
         $plane->SetScale([3, 3, 1]);*/
 
-        $MapId = $agk->CreateObjectFromHeightMap($agk->getPath("./map/textures/displacement2k.png"), 3000, 60, 3000, 4, 16);
+        $MapId = $agk->CreateObjectFromHeightMap($agk->getPath("./map/textures/displacement2k.png"), 6000, 120, 6000, 4, 16);
         $this->ImageController->LoadTexture('map/textures/albedo2k.png', false, true);
         $agk->SetObjectImage($MapId, $this->ImageController->GetTextureByCode('albedo2k'), 0);
+
+        /*$MapId = $agk->CreateObjectFromHeightMap($agk->getPath("./map/textures/displacement2k.png"), 6000, 120, 6000, 4, 16);
+        //$this->ImageController->LoadTexture('map/textures/albedo2k.png', false, true);
+        $agk->SetObjectImage($MapId, $this->ImageController->GetTextureByCode('albedo2k'), 0);
+        $agk->RotateObjectGlobalY($MapId, 90);
+
+        $MapId = $agk->CreateObjectFromHeightMap($agk->getPath("./map/textures/displacement2k.png"), 6000, 120, 6000, 4, 16);
+        //$this->ImageController->LoadTexture('map/textures/albedo2k.png', false, true);
+        $agk->SetObjectImage($MapId, $this->ImageController->GetTextureByCode('albedo2k'), 0);
+        $agk->RotateObjectGlobalY($MapId, 180);
+
+        $MapId = $agk->CreateObjectFromHeightMap($agk->getPath("./map/textures/displacement2k.png"), 6000, 120, 6000, 4, 16);
+        //$this->ImageController->LoadTexture('map/textures/albedo2k.png', false, true);
+        $agk->SetObjectImage($MapId, $this->ImageController->GetTextureByCode('albedo2k'), 0);
+        $agk->RotateObjectGlobalY($MapId, 270);*/
     }
 
     public function Update()
