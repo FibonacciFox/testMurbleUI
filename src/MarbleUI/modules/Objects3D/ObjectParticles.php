@@ -20,10 +20,16 @@ class ObjectParticles extends BaseObject
     private float $FixOffsetZ;
 
 
-    public function __construct(AppGameKit $agk, Core3D $core3D, $position = [0, 0, 0])
+    public function __construct(AppGameKit $agk, Core3D $core3D,  $position = [0, 0, 0])
     {
-        $objectID = $agk->Create3DParticles(0, 0, 0);
+        //var_dump($position);
+        /*$objectID = $agk->Create3DParticles(0, 0, 0);
         var_dump($objectID);
+        $this->objectId = $objectID;
+        $this->softDelete = false;
+        //$this->core3D = $core3D;
+        parent::__construct($agk);*/
+        $objectID = $agk->Create3DParticles($position[0], $position[1], $position[2]);
         $this->objectId = $objectID;
         $this->softDelete = false;
         $this->core3D = $core3D;
@@ -45,7 +51,7 @@ class ObjectParticles extends BaseObject
      *
      * @return mixed
      */
-    public function GetTag(): mixed
+    public function GetTag()
     {
         return $this->Tag;
     }
@@ -53,13 +59,17 @@ class ObjectParticles extends BaseObject
     /**
      * @param int|object $object
      */
-    public function FixToObject(int|object $object)
+    public function FixToObject(object $object)
     {
         if (is_int($object)) {
             $object = $this->core3D->objectList[$object];
         }
         $this->fixedObject = $object;
         $this->fixed = true;
+
+        $this->FixOffsetX = 0;
+        $this->FixOffsetY = 0;
+        $this->FixOffsetZ = 0;
     }
 
     public function SetFixOffsetX(float $amount)
@@ -67,7 +77,7 @@ class ObjectParticles extends BaseObject
         $this->FixOffsetX = $amount;
     }
 
-    public function GetFixOffsetX(): float
+    public function GetFixOffsetX()
     {
         return $this->FixOffsetX;
     }
@@ -77,7 +87,7 @@ class ObjectParticles extends BaseObject
         $this->FixOffsetY = $amount;
     }
 
-    public function GetFixOffsetY(): float
+    public function GetFixOffsetY()
     {
         return $this->FixOffsetY;
     }
@@ -87,7 +97,7 @@ class ObjectParticles extends BaseObject
         $this->FixOffsetZ = $amount;
     }
 
-    public function GetFixOffsetZ(): float
+    public function GetFixOffsetZ()
     {
         return $this->FixOffsetZ;
     }
@@ -97,7 +107,7 @@ class ObjectParticles extends BaseObject
      *
      * @return bool
      */
-    public function IsFixed(): bool
+    public function IsFixed()
     {
         return $this->fixed;
     }
@@ -105,7 +115,7 @@ class ObjectParticles extends BaseObject
     /**
      * @return object
      */
-    public function GetFixedObject(): object
+    public function GetFixedObject()
     {
         return $this->fixedObject;
     }
@@ -127,11 +137,11 @@ class ObjectParticles extends BaseObject
      * обычно, и 0, чтобы приостановить их. Частицы будут продолжать быть видимыми, когда остановятся. Чтобы скрыть
      * частицы, используйте SetVisible.
      *
-     * @param bool $avtive
+     * @param bool $active
      */
-    public function SetActive(bool $avtive)
+    public function SetActive(bool $active)
     {
-        $this->agk->Set3DParticlesActive($this->objectId, $avtive);
+        $this->agk->Set3DParticlesActive($this->objectId, $active);
     }
 
     /**
@@ -321,7 +331,7 @@ class ObjectParticles extends BaseObject
      */
     public function AddColorKeyFrame(float $time, int $red, int $green, int $blue, int $alpha = 255)
     {
-        $this->agk->Add3DParticlesColorKeyFrame($this->objectId, $red, $green, $blue, $alpha);
+        $this->agk->Add3DParticlesColorKeyFrame($this->objectId, $time, $red, $green, $blue, $alpha);
     }
 
     /**

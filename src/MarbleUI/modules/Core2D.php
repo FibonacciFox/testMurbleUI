@@ -11,7 +11,7 @@ use MarbleUI\modules\Objects2D\ObjectVirtualButton;
 use MarbleUI\modules\Objects2D\ObjectInput;
 use MarbleUI\modules\Objects2D\ObjectVirtualJoystick;
 use MarbleUI\modules\Objects2D\ObjectSprite;
-use MarbleUI\modules\Objects2D\ObjectParticles;
+use MarbleUI\modules\Objects2D\Object2DParticles;
 
 class Core2D
 {

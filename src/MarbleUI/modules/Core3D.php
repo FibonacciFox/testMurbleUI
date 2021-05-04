@@ -205,8 +205,9 @@ class Core3D
      *
      * @return ObjectParticles
      */
-    public function CreateParticle(array $position = [0, 0, 0]): ObjectParticles
+    public function CreateParticle($position)
     {
+        //var_dump($position);
         $particle = new ObjectParticles($this->agk, $this, $position);
         $this->particlesList[$particle->objectId] = $particle;
         return $particle;
@@ -222,8 +223,13 @@ class Core3D
             if( $particle->IsFixed() and !$particle->isFree() ){
                 /** @var Object3D $fixedObject */
                 $fixedObject = $particle->GetFixedObject();
-                $offset = $fixedObject->GetPosition();
-                $particle->SetPosition($offset[0] + $particle->GetFixOffsetX(), $offset[1] + $particle->GetFixOffsetY(), $offset[2] + $particle->GetFixOffsetZ());
+                $offset = $fixedObject->GetWorldPosition();
+                //var_dump($offset);
+                $x = $offset[0] + $particle->GetFixOffsetX();
+                $y = $offset[1] + $particle->GetFixOffsetY();
+                $z = $offset[2] + $particle->GetFixOffsetZ();
+                $particle->SetPosition([$x, $y, $z]);
+                //var_dump($fixedObject->objectId);
             }
         }
     }

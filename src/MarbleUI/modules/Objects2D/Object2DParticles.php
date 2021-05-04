@@ -4,7 +4,7 @@
 namespace MarbleUI\modules\Objects2D;
 
 
-class ObjectParticles
+class Object2DParticles
 {
 
 }

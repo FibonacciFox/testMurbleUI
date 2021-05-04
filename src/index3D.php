@@ -40,6 +40,8 @@ class index3D
 
     public bool $Prepare;
 
+    var $deltaTime = 1;
+
     public function __construct($deviceWidth, $deviceHeight)
     {
         global $App;
@@ -55,6 +57,8 @@ class index3D
         $this->AppGameKit = new AppGameKit($this);
         $agk = $this->AppGameKit;
         $agk->Init($this->width, $this->height, false);
+
+        $this->deltaTime = time();
     }
 
     public function Begin()
@@ -76,22 +80,22 @@ class index3D
 
         $agk->SetRawMouseVisible(0);
 
-        $agk->Print("Create classes...");
-        $agk->Sync();
+        //$agk->Print("Create classes...");
+        //$agk->Sync();
 
         $this->Core3D = new Core3D($agk);
         $this->KB = new KeyBoardController($agk);
         $this->Camera = new Camera3D($agk);
         $this->ImageController = new ImagesController($agk);
 
-        $agk->Print("Loading textures...");
-        $agk->Sync();
+        //$agk->Print("Loading textures...");
+        //$agk->Sync();
 
         //Загрузка текстур
         $this->ImageController->LoadTexturesDirectory('textures'); //Поверхности
         $this->ImageController->LoadTexturesDirectory('objects/Ship1/Textures'); //Кораблик
 
-        $id = $this->AppGameKit->Create3DParticles(0,0,0);
+        /*$id = $this->AppGameKit->Create3DParticles(0,0,0);
         $this->AppGameKit->Set3DParticlesDirection($id, -3, 0, 0, 0);
         $this->AppGameKit->Set3DParticlesLife($id, 5);
         $this->AppGameKit->Set3DParticlesDirectionRange($id, 10, 10);
@@ -102,15 +106,15 @@ class index3D
         $this->AppGameKit->Add3DParticlesScaleKeyFrame($id, 0, 1);
         $this->AppGameKit->Add3DParticlesScaleKeyFrame($id, 5, 3);
         $this->AppGameKit->Add3DParticlesColorKeyFrame($id, 0, 255, 0, 0, 255);
-        $this->AppGameKit->Add3DParticlesColorKeyFrame($id, 5, 255, 255, 255, 0);
+        $this->AppGameKit->Add3DParticlesColorKeyFrame($id, 5, 255, 255, 255, 0);*/
 
-        $agk->Print("Loading map...");
-        $agk->Sync();
+        //$agk->Print("Loading map...");
+        //$agk->Sync();
 
         $this->LC = new LevelController($agk, $this->Core3D, $this->ImageController); //Грузим уровень
 
-        $agk->Print("Loading game objects...");
-        $agk->Sync();
+        //$agk->Print("Loading game objects...");
+        //$agk->Sync();
 
         $this->SC = new ShipController($agk, $this->Core3D, $this->ImageController, $this->KB, $this->Camera, $this);
         $this->Prepare = true;
@@ -118,12 +122,13 @@ class index3D
 
     public function Loop()
     {
+        $time = \php\time\Time::millis();
         $agk = $this->AppGameKit;
         $this->LC->Update();
         $this->SC->Update();
-
-        $ship = $this->Core3D->GetObjectWidthTag("Main_Ship");
-        $pos = $ship->GetPosition();
+        $this->Core3D->ParticlesSync();
+        //$ship = $this->Core3D->GetObjectWidthTag("Main_Ship");
+        //$pos = $ship->GetPosition();
 
 //        uiLater(function () use ($pos) {
 //            global $LabelShip;
@@ -134,7 +139,10 @@ class index3D
         //$this->Camera->LockAt(0,0,0,0);
 
         $agk->Print(floor($agk->ScreenFPS()));
+        //$agk->Print();
         $agk->Sync();
+        //;
+        $this->deltaTime = (\php\time\Time::millis() - $time)/100;
     }
 
     public function End()
