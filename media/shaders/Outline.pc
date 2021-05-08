@@ -1,0 +1,14 @@
+varying highp vec2 uvVarying;
+varying mediump vec3 normalVarying;
+varying mediump vec3 lightVarying;
+varying highp vec3 posVarying;
+mediump vec3 GetPSLighting( mediump vec3 normal, highp vec3 pos );
+uniform mediump vec4 agk_MeshDiffuse;
+uniform mediump vec4 agk_MeshEmissive;
+void main()
+{
+    mediump vec4 blendTex = vec4(1.0,1.0,1.0,1.0);
+    mediump vec3 norm = normalize(normalVarying);
+    mediump vec3 light = lightVarying + GetPSLighting( norm, posVarying );
+    gl_FragColor = blendTex * vec4(light,1.0) * agk_MeshDiffuse + agk_MeshEmissive;
+}

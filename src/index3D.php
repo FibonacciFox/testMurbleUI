@@ -14,7 +14,7 @@ use MarbleUI\modules\For3DExample\ShipController;
 //use php\gui\UXForm;
 //use php\gui\UXApplication;
 //use php\gui\UXLabel;
-//use php\lang\Thread;
+use php\lang\Thread;
 //use php\framework;
 //use php\gui;
 //use php\gui\UXButton;
@@ -73,53 +73,53 @@ class index3D
         $agk->SetAntiAliasMode(1);
         $agk->SetOrientationAllowed(1, 1, 1, 1);
         $agk->SetScissor(0, 0, 0, 0);
-        $agk->SetCameraRange(1, 0.01, 4000);
+        $agk->SetCameraRange(1, 0.1, 4000);
         $agk->SetSunActive(1);
         $agk->SetSkyBoxVisible(true);
         $agk->SetSkyBoxSunVisible(true);
         $agk->SetRawMouseVisible(0);
-        //$agk->SetFogRange(3000, 4000);
-        //$agk->SetFogMode(1);
-
-        //$agk->Print("Create classes...");
-        //$agk->Sync();
 
         $this->Core3D = new Core3D($agk);
         $this->KB = new KeyBoardController($agk);
         $this->Camera = new Camera3D($agk);
         $this->ImageController = new ImagesController($agk);
+        $this->Camera->SetFov(60);
 
-        //$agk->Print("Loading textures...");
-        //$agk->Sync();
-
-        //Загрузка текстур
-        $this->ImageController->LoadTexturesDirectory('textures'); //Поверхности
-        $this->ImageController->LoadTexturesDirectory('objects/Ship1/Textures'); //Кораблик
+        //Грузим UI
         $this->ImageController->LoadTexturesDirectory('ui');
 
-        /*$id = $this->AppGameKit->Create3DParticles(0,0,0);
-        $this->AppGameKit->Set3DParticlesDirection($id, -3, 0, 0, 0);
-        $this->AppGameKit->Set3DParticlesLife($id, 5);
-        $this->AppGameKit->Set3DParticlesDirectionRange($id, 10, 10);
-        $this->AppGameKit->Set3DParticlesImage($id, $this->ImageController->GetTextureByCode("engine_particle"));
-        $this->AppGameKit->Set3DParticlesActive($id, true);
-        $this->AppGameKit->Set3DParticlesSize($id, 1);
-        $this->AppGameKit->Set3DParticlesMax($id, -1);
-        $this->AppGameKit->Add3DParticlesScaleKeyFrame($id, 0, 1);
-        $this->AppGameKit->Add3DParticlesScaleKeyFrame($id, 5, 3);
-        $this->AppGameKit->Add3DParticlesColorKeyFrame($id, 0, 255, 0, 0, 255);
-        $this->AppGameKit->Add3DParticlesColorKeyFrame($id, 5, 255, 255, 255, 0);*/
+        $fon = $this->AppGameKit->CreateSprite($this->ImageController->GetTextureByCode("fon_0001"));
+        $this->AppGameKit->SetSpriteSize($fon, $this->width, $this->height);
+        $this->AppGameKit->SetSpritePosition($fon, 0, 0);
+        $this->AppGameKit->Sync();
 
-        //$agk->Print("Loading map...");
-        //$agk->Sync();
+        //Грузим другие текстуры
+        $this->ImageController->LoadTexturesDirectory('textures'); //Поверхности
+        $this->ImageController->LoadTexturesDirectory('objects/Ship1/Textures'); //Кораблик
 
         $this->LC = new LevelController($agk, $this->Core3D, $this->ImageController); //Грузим уровень
 
-        //$agk->Print("Loading game objects...");
-        //$agk->Sync();
+        $this->SC = new ShipController($agk, $this->Core3D, $this->ImageController, $this->KB, $this->Camera, $this, true, 1);
 
-        $this->SC = new ShipController($agk, $this->Core3D, $this->ImageController, $this->KB, $this->Camera, $this);
+        $ship1 = new ShipController($agk, $this->Core3D, $this->ImageController, $this->KB, $this->Camera, $this, false, 0);
+        $ship1->SetPivotPosition([ 1500, 75, 1495 ]);
+
+        $ship2 = new ShipController($agk, $this->Core3D, $this->ImageController, $this->KB, $this->Camera, $this, false, 2);
+        $ship2->SetPivotPosition([ 1495, 75, 1500 ]);
+
+        /*$c3d = $this->Core3D;
+        $thread = new Thread(function () use ($agk, $c3d){
+            while(true){
+                sleep(1);
+                $box = $c3d->CreateBox();
+                $box->SetPosition([rand(0, 6000), rand(0, 120), rand(0, 6000)]);
+            }
+        });
+        $thread->setDaemon(true);
+        $thread->start();*/
+
         $this->Prepare = true;
+        $this->AppGameKit->DeleteSprite($fon);
     }
 
     public function Loop()
@@ -129,21 +129,7 @@ class index3D
         $this->LC->Update();
         $this->SC->Update();
         $this->Core3D->ParticlesSync();
-        //$ship = $this->Core3D->GetObjectWidthTag("Main_Ship");
-        //$pos = $ship->GetPosition();
-
-//        uiLater(function () use ($pos) {
-//            global $LabelShip;
-//            if ($LabelShip)
-//                $LabelShip->text = "X: " . round($pos[0], 2) . " Y: " . round($pos[1], 2) . " Z: " . round($pos[2], 2);
-//        });
-
-        //$this->Camera->LockAt(0,0,0,0);
-
-        //$agk->Print(floor($agk->ScreenFPS()));
-        //$agk->Print();
         $agk->Sync();
-        //;
         $this->deltaTime = (\php\time\Time::millis() - $time)/100;
     }
 
